@@ -1,0 +1,8 @@
+- [ ] Finish setting up forms
+    - [ ] Add HTML form validation
+- [ ] Implement server side form validation
+- [ ] Implement checking logic for FlightPlan
+- [ ] Implement error messages for FlightPlan
+- [ ] Create a way to save a FlightPlan and then come back to it
+    - [ ] Add FlightPlan to API
+- [ ] Implement clear_data

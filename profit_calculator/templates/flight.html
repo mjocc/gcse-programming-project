@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter flight details{% endblock %}
+
+{% block content %}
+<div class="container p-3">
+    <form action="{{ url_for('flight_details') }}" method="post">
+        <div class="form-group my-3">
+            <label class="mb-1" for="aircraft-type">Aircraft Type</label>
+            <select class="form-select" id="aircraft-type" name="aircraft-type" required>
+                <option value="" disabled selected hidden>Select an option</option>
+                {% for aircraft in aircrafts %}
+                    <option value={{ aircrafts.index(aircraft) }}>{{ aircraft.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group my-3">
+            <label class="mb-1" for="first-class-seats">First Class Seats</label>
+            <input type="number" class="form-control" id="first-class-seats" name="first-class-seats" disabled>
+        </div>
+        <input class="btn btn-dark my-2" type="submit"></input>
+        <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
+    </form>
+    {% if submitted %}
+    <div class="my-2 alert alert-success" role="alert">Form submitted successfully.</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const aircraftData = {{ aircraft_data|tojson|safe  }};
+    const aircraftType = $('#aircraft-type');
+    const firstClassSeats = $('#first-class-seats');
+    aircraftType.change(() => {
+        firstClassSeats.prop("disabled", false);
+        let aircraftTypeIndex = aircraftType.val();
+        let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
+        let maxFirstClass = maxStandardClass / 2;
+        firstClassSeats
+            .prop("min", minFirstClass)
+            .prop("max", maxFirstClass);
+    });
+</script>
+{% endblock %}
