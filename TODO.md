@@ -1,6 +1,6 @@
 - [ ] Fix mypy and IDE errors
 - [ ] Implement server side form validation
-- [ ] Document api (see [here](https://hackernoon.com/generate-beautiful-swagger-api-documentation-from-insomnia-ffaa2b77828e))
+- [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
 - [ ] Make each user have their own 'area' with their own flight plan using flask sessions
 - [ ] Create a way to save a FlightPlan and then come back to it (using JSON?)
 - [x] Implement clear_data

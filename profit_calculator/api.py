@@ -1,9 +1,25 @@
 from __future__ import annotations
 
-from flask import Response, abort, jsonify, send_file
+from flask import Response, abort, jsonify, send_file, url_for
 
 from profit_calculator import app, flight_plan
 from profit_calculator.__main__ import Aircraft, Airport
+
+
+@app.route("/api")
+def get_api_docs() -> Response:
+    try:
+        return send_file(url_for("static", filename="api-docs/index.html"))
+    except:
+        abort(500)
+
+
+@app.route("/api/config")
+def get_api_config() -> Response:
+    try:
+        return send_file("../api-docs/insomnia-config.json")
+    except:
+        abort(500)
 
 
 @app.route("/api/airport/<airport_code>")
@@ -32,14 +48,6 @@ def get_flight_plan() -> Response:
         return jsonify(vars(flight_plan))
     except:
         abort(500)
-
-
-@app.route("/api")
-def get_api_config() -> Response:
-    # try:
-    return send_file("../insomnia-config.yaml")
-    # except:
-    #    abort(500)
 
 
 @app.route("/api/test-data", methods=["PUT"])
