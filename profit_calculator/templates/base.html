@@ -30,7 +30,7 @@
                     <a class="dropdown-item link-list-item {% if request.path == url_for('price_plan') %} active {% endif %}" href="{{ url_for('price_plan') }}">Price plan</a>
                     <div class="dropdown-divider"></div>
                     {% if complete %}
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('profit_information') %} active {% endif %}" href="{{ url_for('profit_information') }}">Profit information</a>
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('profit_information') %} active {% endif %}" id="profit-dropdown-button" href="{{ url_for('profit_information') }}">Profit information</a>
                     {% endif %}
                     <a class="dropdown-item link-list-item {% if request.path == url_for('clear_data') %} active {% endif %}" href="{{ url_for('clear_data') }}">Clear data</a>
                 </div>

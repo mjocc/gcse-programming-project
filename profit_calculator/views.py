@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Union
 
-from flask import Response, jsonify, render_template, request
+from flask import Response, abort, jsonify, render_template, request
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -85,16 +85,21 @@ def price_plan() -> str:
 
 @app.route("/profit")
 def profit_information() -> str:
-    fp_dict: dict = vars(fp).copy()
-    for key, value in fp_dict.items():
-        if isinstance(value, float) and key not in ["distance"]:
-            fp_dict[key] = "£{:,.2f}".format(value)
-    fp_dict["distance"] = f"{fp_dict['distance']} km"
-    if fp_dict["uk_airport"] == "LPL":
-        fp_dict["uk_airport"] = "Liverpool John Lennon"
-    elif fp_dict["uk_airport"] == "BOH":
-        fp_dict["uk_airport"] = "Bournemouth International Airport"
-    return render_template("profit.html", flight_plan=fp_dict, profit=fp.profit_made())
+    if fp.complete():
+        fp_dict: dict = vars(fp).copy()
+        for key, value in fp_dict.items():
+            if isinstance(value, float) and key not in ["distance"]:
+                fp_dict[key] = "£{:,.2f}".format(value)
+        fp_dict["distance"] = f"{fp_dict['distance']} km"
+        if fp_dict["uk_airport"] == "LPL":
+            fp_dict["uk_airport"] = "Liverpool John Lennon"
+        elif fp_dict["uk_airport"] == "BOH":
+            fp_dict["uk_airport"] = "Bournemouth International Airport"
+        return render_template(
+            "profit.html", flight_plan=fp_dict, profit=fp.profit_made
+        )
+    else:
+        abort(409)
 
 
 @app.route("/clear", methods=["GET", "DELETE"])
