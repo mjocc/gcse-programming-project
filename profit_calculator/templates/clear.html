@@ -1,3 +1,43 @@
 {% extends 'base.html' %}
 
 {% block title %}Clear data{% endblock %}
+
+{% block content %}
+<div class="container p-3">
+    <div class="alert alert-danger" id="success-message" role="alert"><b>WARNING: clearing data is permanent. All data will need to be re-entered.</b></div>
+    <button class="btn btn-danger" id="main-button" onclick="deleteData()">Continue</button>
+    <a class="btn btn-dark visible" href="{{ url_for('index') }}">Cancel</a>
+</div>
+{% endblock %}
+
+{% block head %}
+<script>
+    function showMessage(messageClass, messageText){
+        $('.visible')
+            .removeClass('visible')
+            .addClass('invisible');
+        $('#main-button')
+            .replaceWith('<a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>')
+        $('#success-message')
+            .removeClass('alert-danger')
+            .addClass(messageClass)
+            .text(messageText)
+            .removeClass('invisible');
+    }
+
+    function deleteData() {
+        console.log("test")
+        $.ajax({
+            url: '{{ url_for('clear_data') }}',
+            type: 'DELETE',
+            success: (result) => {
+                if (result.success) {
+                    showMessage('alert-success', 'Data cleared successfully.');
+                } else {
+                    showMessage('alert-danger', 'Something went wrong. Please try again.');
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

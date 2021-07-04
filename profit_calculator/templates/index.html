@@ -6,7 +6,11 @@
 <div class="container p-5 d-flex flex-column">
     <a href="{{ url_for('airport_details') }}" class="btn btn-dark m-2">Enter airport details</a>
     <a href="{{ url_for('flight_details') }}" class="btn btn-dark m-2">Enter flight details</a>
-    <a href="{{ url_for('calculate_profit') }}" class="btn btn-dark m-2">Enter price plan and calculate profit</a>
+    <a href="{{ url_for('price_plan') }}" class="btn btn-dark m-2">Enter price plan</a>
+    <hr class="mx-2">
+    {% if complete %}
+    <a href="{{ url_for('profit_information') }}" class="btn btn-dark m-2">Profit information</a>
+    {% endif %}
     <a href="{{ url_for('clear_data') }}" class="btn btn-dark m-2">Clear data</a>
 <div>
 {% endblock %}

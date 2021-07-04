@@ -18,11 +18,11 @@
             <select class="form-select" id="o-airport" name="o-airport" required>
                 <option value="" disabled selected hidden>Select an option</option>
                 {% for airport in airports %}
-                    <option value={{ airport.code }}>{{ airport.name }} ({{ airport.code }})</option>
+                    <option value="{{ airport.code }}">{{ airport.name }} ({{ airport.code }})</option>
                 {% endfor %}
             </select>
         </div>
-        <input class="btn btn-dark my-2" type="submit"></input>
+        <input class="btn btn-dark my-2" type="submit" />
         <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
     </form>
 </div>

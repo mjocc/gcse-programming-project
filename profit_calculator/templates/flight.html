@@ -10,7 +10,7 @@
             <select class="form-select" id="aircraft-type" name="aircraft-type" required>
                 <option value="" disabled selected hidden>Select an option</option>
                 {% for aircraft in aircrafts %}
-                    <option value={{ aircrafts.index(aircraft) }}>{{ aircraft.type }}</option>
+                    <option value="{{ aircrafts.index(aircraft) }}">{{ aircraft.type }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -18,7 +18,7 @@
             <label class="mb-1" for="first-class-seats">First Class Seats</label>
             <input type="number" class="form-control" id="first-class-seats" name="first-class-seats" disabled>
         </div>
-        <input class="btn btn-dark my-2" type="submit"></input>
+        <input class="btn btn-dark my-2" type="submit" />
         <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
     </form>
 </div>
@@ -26,17 +26,19 @@
 
 {% block scripts %}
 <script>
-    const aircraftData = {{ aircraft_data|tojson|safe  }};
-    const aircraftType = $('#aircraft-type');
-    const firstClassSeats = $('#first-class-seats');
-    aircraftType.change(() => {
-        firstClassSeats.prop("disabled", false);
-        let aircraftTypeIndex = aircraftType.val();
-        let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
-        let maxFirstClass = maxStandardClass / 2;
-        firstClassSeats
-            .prop("min", minFirstClass)
-            .prop("max", maxFirstClass);
+    $(function() {
+        const aircraftData = {{ aircraft_data|tojson|safe  }};
+        const aircraftType = $('#aircraft-type');
+        const firstClassSeats = $('#first-class-seats');
+        aircraftType.change(() => {
+            firstClassSeats.prop("disabled", false);
+            let aircraftTypeIndex = aircraftType.val();
+            let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
+            let maxFirstClass = maxStandardClass / 2;
+            firstClassSeats
+                .prop("min", minFirstClass)
+                .prop("max", maxFirstClass);
+        });
     });
 </script>
 {% endblock %}

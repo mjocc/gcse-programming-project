@@ -1,3 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Enter price plan and calculate profit{% endblock %}
+{% block title %}Profit information{% endblock %}
+
+{% block content %}
+<div class="container p-3">
+    <table class="table">
+        <tr></tr>
+        {% for key, value in flight_plan.items() %}
+        <tr {% if key == "profit" %}class="{% if profit == 1 %}table-success{% elif profit == 0 %}table-warning{% else %}table-danger{% endif %}"{% endif %}>
+            <th scope="row">{{ key }}</th>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

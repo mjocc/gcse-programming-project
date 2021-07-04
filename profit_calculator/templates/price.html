@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter price plan{% endblock %}
+
+{% block content %}
+<div class="container p-3">
+    {% if not airport_data %}
+    <div class="alert alert-danger" role="alert">No airport data has been submitted. This is needed to calculate the profit. Press <a href="{{ url_for('airport_details') }}">here</a> to enter it.</div>
+    {% endif %}
+    {% if not aircraft_data %}
+    <div class="alert alert-danger" role="alert">No aircraft data has been submitted. This is needed to calculate the profit. Press <a href="{{ url_for('flight_details') }}">here</a> to enter it.</div>
+    {% endif %}
+    {% if not in_range and in_range is not none %}
+    <div class="alert alert-danger" role="alert">This route is longer than the range of the aircraft selected. Please change the aircraft <a href="{{ url_for('flight_details') }}">here</a> or change the route <a href="{{ url_for('airport_details') }}">here</a>.</div>
+    {% endif %}
+    <form action="{{ url_for('price_plan') }}" method="post">
+        <div class="form-group my-3">
+            <label class="mb-1" for="standard-class-price">Price of a standard class seat</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">£</div>
+                </div>
+            <input type="number" step="0.01" min="0" class="form-control" id="standard-class-price" name="standard-class-price" required {% if disable %}disabled{% endif %} />
+            </div>
+        </div>
+        <div class="form-group my-3">
+            <label class="mb-1" for="first-class-price">Price of a first class seat</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">£</div>
+                </div>
+            <input type="number" step="0.01" min="0" class="form-control" id="first-class-price" name="first-class-price" required {% if disable %}disabled{% endif %} />
+            </div>
+        </div>
+        <input class="btn btn-dark my-2" type="submit" />
+        <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
+    </form>
+</div>
+{% endblock %}

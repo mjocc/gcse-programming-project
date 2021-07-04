@@ -1,8 +1,15 @@
-- [ ] Finish setting up forms
-    - [ ] Add HTML form validation
+- [ ] Fix mypy and IDE errors
 - [ ] Implement server side form validation
-- [ ] Implement checking logic for FlightPlan
-- [ ] Implement error messages for FlightPlan
-- [ ] Create a way to save a FlightPlan and then come back to it
-    - [ ] Add FlightPlan to API
-- [ ] Implement clear_data
+- [ ] Document api (see [here](https://hackernoon.com/generate-beautiful-swagger-api-documentation-from-insomnia-ffaa2b77828e))
+- [ ] Make each user have their own 'area' with their own flight plan using cookies
+- [ ] Create a way to save a FlightPlan and then come back to it (using JSON?)
+- [x] Implement clear_data
+- [x] Finish setting up forms
+    - [x] Add HTML form validation
+- [x] Add calculate profit page that appears once all data had been entered
+- [x] Implement profit.html
+- [x] Add test method to automatically insert data needed for flight plan
+  - [x] Implement checking logic for FlightPlan
+  - [x] Implement error messages for FlightPlan
+  - [x] Add FlightPlan to API
+- [x] Make clear.html have a back to main menu button

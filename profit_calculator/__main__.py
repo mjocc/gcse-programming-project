@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import csv
-from typing import Optional
+from typing import Iterator, Optional
+
+from flask.json import JSONEncoder
 
 
 class Airport:
@@ -22,7 +24,7 @@ class Airport:
     @staticmethod
     def import_data() -> None:
         with open("Airports.txt", "r") as file:
-            reader: list[str] = list(csv.reader(file))
+            reader: Iterator[str] = list(csv.reader(file))
         for row in reader:
             __class__.all[row[0]] = Airport(*row)
 
@@ -37,6 +39,7 @@ class Aircraft:
         self.running_cost: float = float(
             running_cost
         )  # running cost per seat per 100km
+        self.range: float = float(range)
         self.max_standard_class: int = int(max_standard_class)
         self.min_first_class: int = int(min_first_class)
 
@@ -71,7 +74,7 @@ class FlightPlan:
         self.income: Optional[float] = None
         self.profit: Optional[float] = None
 
-    def airport_details(self, uk_airport, foreign_airport):
+    def airport_details(self, uk_airport, foreign_airport) -> None:
         self.uk_airport = uk_airport
         self.foreign_airport = Airport.all[foreign_airport]
         if self.uk_airport == "LPL":
@@ -79,15 +82,27 @@ class FlightPlan:
         elif self.uk_airport == "BOH":
             self.distance = self.foreign_airport.distance_from_boh
 
-    def flight_details(self, aircraft, no_first_class):
+    def airport_details_exist(self) -> bool:
+        return self.uk_airport is not None and self.foreign_airport is not None
+
+    def flight_details(self, aircraft, no_first_class) -> None:
         self.aircraft = aircraft
         self.no_first_class = int(no_first_class)
         self.no_standard_class = aircraft.max_standard_class - self.no_first_class * 2
 
-    def price_plan(self, standard_class_price, first_class_price):
+    def flight_details_exist(self) -> bool:
+        return self.aircraft is not None and self.no_first_class is not None
+
+    def flight_in_range(self) -> Optional[bool]:
+        if self.airport_details_exist() and self.flight_details_exist():
+            return self.aircraft.range > self.distance
+        else:
+            return None
+
+    def price_plan(self, standard_class_price, first_class_price) -> None:
         self.standard_class_price = float(standard_class_price)
         self.first_class_price = float(first_class_price)
-        self.cost_per_seat = self.aircraft.running_cost
+        self.cost_per_seat = self.aircraft.running_cost * (self.distance / 100)
         self.running_cost = float(
             self.cost_per_seat * (self.no_first_class + self.no_standard_class)
         )
@@ -95,8 +110,33 @@ class FlightPlan:
             self.no_first_class * self.first_class_price
             + self.no_standard_class * self.standard_class_price
         )
-        self.profit = float(self.flight_income - self.flight_cost)
+        self.profit = float(self.income - self.running_cost)
+
+    def complete(self) -> bool:
+        return (
+            self.airport_details_exist()
+            and self.flight_details_exist()
+            and self.flight_in_range()
+            and self.standard_class_price is not None
+            and self.first_class_price is not None
+        )
+
+    def profit_made(self) -> int:
+        if self.complete():
+            if self.profit > 0:
+                return 1
+            elif self.profit == 0:
+                return 0
+            else:
+                return -1
 
 
-def clear_data():
-    pass
+class FlightPlanJSONEncoder(JSONEncoder):
+    def default(self, obj) -> str:
+        return obj.__dict__
+
+
+def insert_test_data(flight_plan) -> None:
+    flight_plan.airport_details("LPL", "ORY")
+    flight_plan.flight_details(Aircraft.all[2], 50)
+    flight_plan.price_plan(50.00, 100.00)

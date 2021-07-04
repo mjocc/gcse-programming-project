@@ -18,7 +18,23 @@
                 <img src="{{ url_for('static', filename='img/plane.svg') }}" width="30" height="30" class="d-inline-block align-top mx-1" alt="">
                 Flight Plan Profitability Calculator
             </a>
-            <span class="navbar-text px-3">{{ self.title() }}</span>
+            <div class="dropdown show">
+                <span class="navbar-text px-3 dropdown-toggle" role="button" id="dropdown-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ self.title() }}
+                </span>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-menu-link">
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('index') %} active {% endif %}" href="{{ url_for('index') }}">Home</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('airport_details') %} active {% endif %}" href="{{ url_for('airport_details') }}">Airport details</a>
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('flight_details') %} active {% endif %}" href="{{ url_for('flight_details') }}">Flight details</a>
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('price_plan') %} active {% endif %}" href="{{ url_for('price_plan') }}">Price plan</a>
+                    <div class="dropdown-divider"></div>
+                    {% if complete %}
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('profit_information') %} active {% endif %}" href="{{ url_for('profit_information') }}">Profit information</a>
+                    {% endif %}
+                    <a class="dropdown-item link-list-item {% if request.path == url_for('clear_data') %} active {% endif %}" href="{{ url_for('clear_data') }}">Clear data</a>
+                </div>
+            </div>
             </nav>
         </header>
         <main>
@@ -30,7 +46,7 @@
             {% endif %}
         </main>
     </section>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
