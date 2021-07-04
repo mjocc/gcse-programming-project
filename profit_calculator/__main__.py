@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from typing import Iterator, Optional
+from typing import Optional
 
 from flask.json import JSONEncoder
 
@@ -24,9 +24,9 @@ class Airport:
     @staticmethod
     def import_data() -> None:
         with open("Airports.txt", "r") as file:
-            reader: Iterator[str] = list(csv.reader(file))
+            reader: list[list[str]] = list(csv.reader(file))
         for row in reader:
-            __class__.all[row[0]] = Airport(*row)
+            Airport.all[row[0]] = Airport(*row)
 
 
 class Aircraft:
@@ -44,7 +44,7 @@ class Aircraft:
         self.min_first_class: int = int(min_first_class)
 
     def __repr__(self) -> str:
-        return f"{__class__.all.index(self)}: {self.type}"
+        return f"{Aircraft.all.index(self)}: {self.type}"
 
     def __str__(self) -> str:
         return self.type
@@ -52,9 +52,9 @@ class Aircraft:
     @staticmethod
     def import_data() -> None:
         with open("Aircraft.txt", "r") as file:
-            reader: list[str] = list(csv.reader(file))
+            reader: list[list[str]] = list(csv.reader(file))
         for row in reader:
-            __class__.all.append(Aircraft(*row))
+            Aircraft.all.append(Aircraft(*row))
 
 
 class FlightPlan:

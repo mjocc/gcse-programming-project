@@ -8,6 +8,7 @@ description="flask template"
 flask = "^2.0.0"
 python = "^3.8"
 colorama = "^0.4.4"
+types-Flask = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"

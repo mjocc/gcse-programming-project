@@ -84,7 +84,7 @@ def price_plan() -> str:
 
 
 @app.route("/profit")
-def profit_information() -> str:
+def profit_information() -> Optional[str]:
     if fp.complete():
         fp_dict: dict = vars(fp).copy()
         for key, value in fp_dict.items():
@@ -96,16 +96,19 @@ def profit_information() -> str:
         elif fp_dict["uk_airport"] == "BOH":
             fp_dict["uk_airport"] = "Bournemouth International Airport"
         return render_template(
-            "profit.html", flight_plan=fp_dict, profit=fp.profit_made
+            "profit.html", flight_plan=fp_dict, profit=fp.profit_made()
         )
     else:
         abort(409)
+        return None
 
 
 @app.route("/clear", methods=["GET", "DELETE"])
-def clear_data() -> Union[str, Response]:
+def clear_data() -> Optional[Union[str, Response]]:
     if request.method == "DELETE":
-        fp.__init__()
+        fp.__init__()  # type: ignore[misc]
         return jsonify(success=True)
     elif request.method == "GET":
         return render_template("clear.html")
+    else:
+        return None

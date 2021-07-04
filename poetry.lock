@@ -248,6 +248,54 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "types-click"
+version = "7.1.2"
+description = "Typing stubs for click"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-flask"
+version = "1.1.1"
+description = "Typing stubs for Flask"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+types-click = "*"
+types-Jinja2 = "*"
+types-Werkzeug = "*"
+
+[[package]]
+name = "types-jinja2"
+version = "2.11.2"
+description = "Typing stubs for Jinja2"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+types-MarkupSafe = "*"
+
+[[package]]
+name = "types-markupsafe"
+version = "1.1.4"
+description = "Typing stubs for MarkupSafe"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-werkzeug"
+version = "1.0.2"
+description = "Typing stubs for Werkzeug"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "3.10.0.0"
 description = "Backported and Experimental Type Hints for Python 3.5+"
@@ -269,7 +317,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e257d4585b5550b9d67dc26d9fc2fb694070540423caa90dbfd9fa6531bf291a"
+content-hash = "9488260fc2d8b996d19012976d1a4ba37b8ae726ed8f120d226bff54961a7258"
 
 [metadata.files]
 appdirs = [
@@ -451,6 +499,26 @@ regex = [
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
+]
+types-click = [
+    {file = "types-click-7.1.2.tar.gz", hash = "sha256:040897284e4f9466825c3865f708a985a8e7ba4d8e22cb9198ffb7b522160850"},
+    {file = "types_click-7.1.2-py2.py3-none-any.whl", hash = "sha256:4722746f1ec9fd3fc8b1d7fb8c840604dc22f9e32bcc7a31a36d6d85cc2bce24"},
+]
+types-flask = [
+    {file = "types-Flask-1.1.1.tar.gz", hash = "sha256:90afe8bd050cf8830cdc620bb9aa4471836b86af88e4d33fccc8789242a661e2"},
+    {file = "types_Flask-1.1.1-py2.py3-none-any.whl", hash = "sha256:4885fd9c64756b0901d3de0a197d0ede60df114d0fbab500aa1bd73bb2c1651c"},
+]
+types-jinja2 = [
+    {file = "types-Jinja2-2.11.2.tar.gz", hash = "sha256:5b53d2b8bc6dd6dfbc0ae3e33e346fbe343cbeba1ed528858749e2a2ffe0e143"},
+    {file = "types_Jinja2-2.11.2-py2.py3-none-any.whl", hash = "sha256:d27e112a8add449407de235f4533239149056327c8bddc6b0d6bf80cd7280c16"},
+]
+types-markupsafe = [
+    {file = "types-MarkupSafe-1.1.4.tar.gz", hash = "sha256:4fd2cc858fb4aea38555850f4ac2ecafae3543c88abb056669a3346c5c1b202c"},
+    {file = "types_MarkupSafe-1.1.4-py3-none-any.whl", hash = "sha256:2539a9e9b1b5a1bf1c10fdf2cb1dcb89e6f360759196883f4d5d103c53624375"},
+]
+types-werkzeug = [
+    {file = "types-Werkzeug-1.0.2.tar.gz", hash = "sha256:7f6d4c8771a67d44e83134d56e59b482bf81ebd28e6557015fdfcc81e3d11b53"},
+    {file = "types_Werkzeug-1.0.2-py2.py3-none-any.whl", hash = "sha256:1a4e551955e6fc608cf6b93a2749963b9cce5ff56cddfc90404af1c919afa937"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},
