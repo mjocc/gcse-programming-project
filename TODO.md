@@ -1,6 +1,9 @@
 - [ ] Fix mypy and IDE errors
 - [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
+    - [x] Fix documentation files
+    - [ ] Add more detail to insomnia config
+    - [ ] Create a localhost and replit development environment in insomnia
 - [ ] Make each user have their own 'area' with their own flight plan using flask sessions
 - [ ] Create a way to save a FlightPlan and then come back to it (using JSON?)
 - [x] Implement clear_data

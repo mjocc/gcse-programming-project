@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from flask import Response, abort, jsonify, send_file, url_for
+from flask import Response, abort, jsonify, render_template, send_file
 
 from profit_calculator import app, flight_plan
 from profit_calculator.__main__ import Aircraft, Airport
@@ -9,9 +9,14 @@ from profit_calculator.__main__ import Aircraft, Airport
 @app.route("/api")
 def get_api_docs() -> Response:
     try:
-        return send_file(url_for("static", filename="api-docs/index.html"))
+        return render_template("api-docs.html")
     except:
         abort(500)
+
+
+@app.route("/logo.png")
+def get_logo() -> Response:
+    return send_file("static/api-docs/logo.png")
 
 
 @app.route("/api/config")
