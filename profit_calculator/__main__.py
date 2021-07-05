@@ -1,13 +1,11 @@
-from __future__ import annotations
-
 import csv
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 from flask.json import JSONEncoder
 
 
 class Airport:
-    all: dict[str, Airport] = {}
+    all: Dict[str, Any] = {}
 
     def __init__(self, code, name, distance_from_lpl, distance_from_boh) -> None:
         self.code: str = code
@@ -24,13 +22,14 @@ class Airport:
     @staticmethod
     def import_data() -> None:
         with open("Airports.txt", "r") as file:
-            reader: list[list[str]] = list(csv.reader(file))
+            reader: List[List[str]] = list(csv.reader(file))
         for row in reader:
             Airport.all[row[0]] = Airport(*row)
 
 
+# noinspection PyShadowingBuiltins
 class Aircraft:
-    all: list[Aircraft] = []
+    all: List[Any] = []
 
     def __init__(
         self, type, running_cost, range, max_standard_class, min_first_class
@@ -52,7 +51,7 @@ class Aircraft:
     @staticmethod
     def import_data() -> None:
         with open("Aircraft.txt", "r") as file:
-            reader: list[list[str]] = list(csv.reader(file))
+            reader: List[List[str]] = list(csv.reader(file))
         for row in reader:
             Aircraft.all.append(Aircraft(*row))
 

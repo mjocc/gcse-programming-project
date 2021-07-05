@@ -3,6 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<!--suppress SyntaxError -->
 <div class="container p-5 d-flex flex-column">
     <a href="{{ url_for('airport_details') }}" class="btn btn-dark m-2">Enter airport details</a>
     <a href="{{ url_for('flight_details') }}" class="btn btn-dark m-2">Enter flight details</a>
@@ -11,6 +12,6 @@
     {% if complete %}
     <a href="{{ url_for('profit_information') }}" class="btn btn-dark m-2">Profit information</a>
     {% endif %}
-    <a href="{{ url_for('clear_data') }}" class="btn btn-dark m-2">Clear data</a>
+    <a href="{{ url_for('clear_data_confirmation') }}" class="btn btn-dark m-2">Clear data</a>
 <div>
 {% endblock %}

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="profit_calculator" pattern="file[gcse-programming-project]:profit_calculator//*&amp;&amp;!file[gcse-programming-project]:profit_calculator/static/api-docs//*&amp;&amp;!file[gcse-programming-project]:profit_calculator/static/img//*" />
+</component>

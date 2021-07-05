@@ -1,21 +1,20 @@
-from __future__ import annotations
+import json
+from typing import Optional
 
-from typing import Optional, Union
-
-from flask import Response, abort, jsonify, render_template, request, session
+from flask import abort, render_template, request, session
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
-from profit_calculator.__main__ import Aircraft, Airport
+from profit_calculator.__main__ import Aircraft, Airport, FlightPlanJSONEncoder
 
 
 @app.before_request
 def check_session():
-    if session.new:
-        session.permanent = True
-    if session.modified:
-        print("session modified")
-    print(session.permanent)
+    session.permanent = True
+    if "flight_plan" in session:
+        pass
+    else:
+        session["flight_plan"] = json.dumps(vars(fp), cls=FlightPlanJSONEncoder)
 
 
 @app.context_processor
@@ -112,12 +111,6 @@ def profit_information() -> Optional[str]:
         return None
 
 
-@app.route("/clear", methods=["GET", "DELETE"])
-def clear_data() -> Optional[Union[str, Response]]:
-    if request.method == "DELETE":
-        fp.__init__()  # type: ignore[misc]
-        return jsonify(success=True)
-    elif request.method == "GET":
-        return render_template("clear.html")
-    else:
-        return None
+@app.route("/clear")
+def clear_data_confirmation() -> str:
+    return render_template("clear.html")
