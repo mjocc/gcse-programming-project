@@ -18,6 +18,13 @@
             .addClass(messageClass)
             .text(messageText)
             .removeClass('invisible');
+        $('.visible')
+            .removeClass('visible')
+            .addClass('invisible');
+        $('#main-button')
+            .replaceWith('<a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>')
+        $('#profit-dropdown-button')
+            .remove()
     }
 
     function deleteData() {
@@ -33,13 +40,6 @@
                 }
             }
         });
-        $('.visible')
-            .removeClass('visible')
-            .addClass('invisible');
-        $('#main-button')
-            .replaceWith('<a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>')
-        $('#profit-dropdown-button')
-            .remove()
     }
 </script>
 {% endblock %}

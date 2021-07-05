@@ -6,6 +6,7 @@
     - [ ] Create a localhost and replit development environment in insomnia
 - [ ] Make each user have their own 'area' with their own flight plan using flask sessions
 - [ ] Create a way to save a FlightPlan and then come back to it (using JSON?)
+- [ ] Add media queries to make site work on mobile
 - [x] Implement clear_data
 - [x] Finish setting up forms
     - [x] Add HTML form validation

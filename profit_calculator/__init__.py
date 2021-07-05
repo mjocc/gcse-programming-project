@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, session
 
 app = Flask(__name__)
-app.secret_key = "3Fn9cPqKo5qDpEFXnGrI"
+app.secret_key = b"3Fn9cPqKo5qDpEFXnGrI"
 
 from profit_calculator.__main__ import (Aircraft, Airport, FlightPlan,
                                         FlightPlanJSONEncoder)

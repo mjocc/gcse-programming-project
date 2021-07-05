@@ -2,11 +2,20 @@ from __future__ import annotations
 
 from typing import Optional, Union
 
-from flask import Response, abort, jsonify, render_template, request
+from flask import Response, abort, jsonify, render_template, request, session
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
 from profit_calculator.__main__ import Aircraft, Airport
+
+
+@app.before_request
+def check_session():
+    if session.new:
+        session.permanent = True
+    if session.modified:
+        print("session modified")
+    print(session.permanent)
 
 
 @app.context_processor
