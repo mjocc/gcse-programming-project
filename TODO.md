@@ -1,8 +1,11 @@
-- [ ] Create a way to save a FlightPlan and then come back to it (using JSON)
+- [x] Create a way to save a FlightPlan and then come back to it (using pickle)
+  - [x] Implement API
+  - [ ] Create forms
 - [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
     - [x] Create a localhost and replit development environment in insomnia
+    - [ ] Add new API endpoints
     - [ ] Add more detail to insomnia config
 - [ ] Add media queries to make site work on mobile
 - [x] Fix IDE errors

@@ -1,4 +1,3 @@
-import pickle
 from typing import Optional
 
 from flask import abort, render_template, request

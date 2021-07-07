@@ -1,6 +1,6 @@
-import pickle
+from datetime import datetime
 
-from flask import Response, response, abort, jsonify, render_template, send_file
+from flask import Response, abort, jsonify, render_template, request, send_file
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -51,10 +51,24 @@ def insert_test_data() -> Response:
     return jsonify(success=True)
 
 
-@app.route("/api/import-file-data")
+@app.route("/api/import-data", methods=["POST"])
 def import_file_data() -> Response:
-    fp.import_from_file(response)
-    return jsonify(success=True)
+    success: bool = fp.import_from_file(request)
+    return jsonify(success=success)
+
+
+# noinspection PyArgumentList
+@app.route("/api/export-data")
+def export_file_data() -> Response:
+    file, digest = fp.export_as_file()
+    return send_file(
+        file,
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name="fp.flightplan",
+        last_modified=datetime.now(),
+        etag=digest,
+    )
 
 
 @app.route("/api/clear", methods=["DELETE"])
