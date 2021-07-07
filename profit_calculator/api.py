@@ -1,4 +1,6 @@
-from flask import Response, abort, jsonify, render_template, send_file
+import pickle
+
+from flask import Response, response, abort, jsonify, render_template, send_file
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -10,14 +12,14 @@ def get_api_docs() -> str:
     return render_template("api-docs.html")
 
 
-@app.route("/logo.png")
+@app.route("/logo.png")  # Needed for Insomnia Documenter to work
 def get_logo() -> Response:
     return send_file("static/api-docs/logo.png")
 
 
 @app.route("/api/config")
 def get_api_config() -> Response:
-    return send_file("../api-docs/insomnia-config.json")
+    return send_file("static/api-docs/insomnia.json")
 
 
 @app.route("/api/airport/<airport_code>")
@@ -46,6 +48,12 @@ def insert_test_data() -> Response:
     fp.airport_details("LPL", "ORY")
     fp.flight_details(Aircraft.all[2], 50)
     fp.price_plan(50.00, 100.00)
+    return jsonify(success=True)
+
+
+@app.route("/api/import-file-data")
+def import_file_data() -> Response:
+    fp.import_from_file(response)
     return jsonify(success=True)
 
 

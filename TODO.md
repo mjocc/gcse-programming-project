@@ -1,11 +1,9 @@
+- [ ] Create a way to save a FlightPlan and then come back to it (using JSON)
 - [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
-    - [ ] Add more detail to insomnia config
     - [x] Create a localhost and replit development environment in insomnia
-- [ ] Create import from json method for 
-  - [ ] Make each user have their own 'area' with their own flight plan using flask sessions
-  - [ ] Create a way to save a FlightPlan and then come back to it (using JSON)
+    - [ ] Add more detail to insomnia config
 - [ ] Add media queries to make site work on mobile
 - [x] Fix IDE errors
 - [x] Implement clear_data
@@ -18,3 +16,4 @@
   - [x] Implement error messages for FlightPlan
   - [x] Add FlightPlan to API
 - [x] Make clear.html have a back to main menu button
+- [x] Create import from method for FlightPlan

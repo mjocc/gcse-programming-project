@@ -252,5 +252,6 @@ cython_debug/
 
 ### Replit ###
 .breakpoints
+main.py
 
 ### Project Specific ###

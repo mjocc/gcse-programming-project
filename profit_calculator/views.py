@@ -1,20 +1,11 @@
-import json
+import pickle
 from typing import Optional
 
-from flask import abort, render_template, request, session
+from flask import abort, render_template, request
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
-from profit_calculator.__main__ import Aircraft, Airport, FlightPlanJSONEncoder
-
-
-@app.before_request
-def check_session():
-    session.permanent = True
-    if "flight_plan" in session:
-        pass
-    else:
-        session["flight_plan"] = json.dumps(vars(fp), cls=FlightPlanJSONEncoder)
+from profit_calculator.__main__ import Aircraft, Airport
 
 
 @app.context_processor

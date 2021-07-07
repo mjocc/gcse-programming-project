@@ -1,7 +1,8 @@
 from flask import Flask
 
 app = Flask(__name__)
-app.secret_key = b"L!.+\xf7w\x80\xec\x15}.\xb2\xaa\x85\xeeF"
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1000 * 1000  # 1 MB limit for pickle file uploads
+ALLOWED_EXTENSIONS = {"flightplan"}
 
 from profit_calculator.__main__ import FlightPlan  # noqa
 from profit_calculator.__main__ import Aircraft, Airport, FlightPlanJSONEncoder

@@ -1,8 +1,11 @@
 import csv
+import pickle
+import random
 from typing import Any, Dict, List, Optional
 
 from flask.json import JSONEncoder
 
+from profit_calculator import ALLOWED_EXTENSIONS
 
 class Airport:
     all: Dict[str, Any] = {}
@@ -14,7 +17,7 @@ class Airport:
         self.distance_from_boh: float = float(distance_from_boh)
 
     def __repr__(self) -> str:
-        return f"{self.code}: {self.name}"
+        return f"Airport: {self.name} ({self.code})"
 
     def __str__(self) -> str:
         return self.name
@@ -32,7 +35,7 @@ class Aircraft:
     all: List[Any] = []
 
     def __init__(
-        self, type, running_cost, range, max_standard_class, min_first_class
+        self, type, running_cost, range, max_standard_class, min_first_class, id=None
     ) -> None:
         self.type: str = type
         self.running_cost: float = float(
@@ -41,9 +44,10 @@ class Aircraft:
         self.range: float = float(range)
         self.max_standard_class: int = int(max_standard_class)
         self.min_first_class: int = int(min_first_class)
+        self.id = id
 
     def __repr__(self) -> str:
-        return f"{Aircraft.all.index(self)}: {self.type}"
+        return f"Aircraft: {self.type} ({self.id})"
 
     def __str__(self) -> str:
         return self.type
@@ -52,26 +56,51 @@ class Aircraft:
     def import_data() -> None:
         with open("Aircraft.txt", "r") as file:
             reader: List[List[str]] = list(csv.reader(file))
-        for row in reader:
-            Aircraft.all.append(Aircraft(*row))
+        for index, row in enumerate(reader):
+            Aircraft.all.append(Aircraft(*row, id=index))
 
 
 class FlightPlan:
-    def __init__(self) -> None:
-        self.uk_airport: Optional[str] = None
-        self.foreign_airport: Optional[Airport] = None
-        self.distance: Optional[float] = None
+    def __init__(
+        self,
+        uk_airport=None,
+        foreign_airport=None,
+        distance=None,
+        aircraft=None,
+        no_first_class=None,
+        no_standard_class=None,
+        standard_class_price=None,
+        first_class_price=None,
+        cost_per_seat=None,
+        running_cost=None,
+        income=None,
+        profit=None,
+    ) -> None:
+        self.uk_airport: Optional[str] = uk_airport
+        self.foreign_airport: Optional[Airport] = foreign_airport
+        self.distance: Optional[float] = distance
 
-        self.aircraft: Optional[Aircraft] = None
-        self.no_first_class: Optional[int] = None
-        self.no_standard_class: Optional[int] = None
+        self.aircraft: Optional[Aircraft] = aircraft
+        self.no_first_class: Optional[int] = no_first_class
+        self.no_standard_class: Optional[int] = no_standard_class
 
-        self.standard_class_price: Optional[float] = None
-        self.first_class_price: Optional[float] = None
-        self.cost_per_seat: Optional[float] = None
-        self.running_cost: Optional[float] = None
-        self.income: Optional[float] = None
-        self.profit: Optional[float] = None
+        self.standard_class_price: Optional[float] = standard_class_price
+        self.first_class_price: Optional[float] = first_class_price
+        self.cost_per_seat: Optional[float] = cost_per_seat
+        self.running_cost: Optional[float] = running_cost
+        self.income: Optional[float] = income
+        self.profit: Optional[float] = profit
+
+    def import_from_file(self, response_obj) -> bool:
+        # Docs here https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
+        if "file" not in response_obj.files:
+            return False
+        pickle_file = response_obj.files["file"]
+        self = pickle.loads(pickle_file)
+        if self.foreign_airport is not None:
+            self.foreign_airport = Airport.all[self.foreign_airport.code]
+        if self.aircraft is not None:
+            self.aircraft = Aircraft.all[self.aircraft.id]
 
     def airport_details(self, uk_airport, foreign_airport) -> None:
         self.uk_airport = uk_airport
@@ -136,6 +165,15 @@ class FlightPlanJSONEncoder(JSONEncoder):
 
 
 def insert_test_data(flight_plan) -> None:
-    flight_plan.airport_details("LPL", "ORY")
-    flight_plan.flight_details(Aircraft.all[2], 50)
-    flight_plan.price_plan(50.00, 100.00)
+    flight_plan.airport_details(
+        random.choice(["LPL", "BOH"]),
+        random.choice([airport.code for airport in Airport.all.values()]),
+    )
+    flight_plan.flight_details(random.choice(Aircraft.all), random.randint(15, 45))
+    flight_plan.price_plan(
+        round(random.uniform(25, 75), 2), round(random.uniform(100, 200), 2)
+    )
+
+def allowed_file(filename) -> bool:
+    return ('.' in filename and
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS)
