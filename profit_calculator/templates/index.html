@@ -4,14 +4,16 @@
 
 {% block content %}
 <!--suppress SyntaxError -->
-<div class="container p-5 d-flex flex-column">
+<div class="container px-2 py-3 d-flex flex-column">
     <a href="{{ url_for('airport_details') }}" class="btn btn-dark m-2">Enter airport details</a>
     <a href="{{ url_for('flight_details') }}" class="btn btn-dark m-2">Enter flight details</a>
     <a href="{{ url_for('price_plan') }}" class="btn btn-dark m-2">Enter price plan</a>
-    <hr class="mx-2">
+    <hr class="m-2">
     {% if complete %}
     <a href="{{ url_for('profit_information') }}" class="btn btn-dark m-2">Profit information</a>
+    <hr class="m-2">
     {% endif %}
+    <a href="{{ url_for('export_form') }}" class="btn btn-dark m-2">Import/export data</a>
     <a href="{{ url_for('clear_data_confirmation') }}" class="btn btn-dark m-2">Clear data</a>
 <div>
 {% endblock %}

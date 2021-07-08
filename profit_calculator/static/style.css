@@ -1,4 +1,10 @@
-.dropdown-menu {
+#navbar-dropdown-menu {
     position: absolute;
     right: 0;
+}
+
+@media screen and (max-width: 460px) {
+    #navbar-dropdown-menu {
+        left: 0;
+    }
 }

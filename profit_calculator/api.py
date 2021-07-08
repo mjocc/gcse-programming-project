@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Optional
 
 from flask import Response, abort, jsonify, render_template, request, send_file
@@ -46,32 +45,25 @@ def get_flight_plan() -> Response:
 
 @app.route("/api/test-data", methods=["PUT"])
 def insert_test_data() -> Response:
-    fp.airport_details("LPL", "ORY")
-    fp.flight_details(Aircraft.all[2], 50)
-    fp.price_plan(50.00, 100.00)
+    fp.insert_test_data()
     return jsonify(success=True)
 
 
 @app.route("/api/import-data", methods=["POST"])
 def import_file_data() -> Response:
-    success: bool, err_msg: Optional[str] = fp.import_from_file(request)
+    success: bool
+    err_msg: str
+    success, err_msg = fp.import_from_file(request)
     response_dict = dict(success=success)
-    if err_msg is not None:
-        response_dict[message] = err_msg
+    if success is False:
+        response_dict["message"] = err_msg
     return jsonify(response_dict)
 
 
-# noinspection PyArgumentList
 @app.route("/api/export-data")
 def export_file_data() -> Response:
     file = fp.export_as_file()
-    return send_file(
-        file,
-        mimetype="application/octet-stream",
-        as_attachment=True,
-        download_name="fp.flightplan",
-        last_modified=datetime.now(),
-    )
+    return file
 
 
 @app.route("/api/clear", methods=["DELETE"])

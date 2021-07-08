@@ -1,14 +1,10 @@
-- [x] Create a way to save a FlightPlan and then come back to it (using pickle)
-  - [x] Implement API
-  - [x] Implement custom error messages in FlightPlan.import_file_data (not just True or False) (Use Flask Flash?)
-  - [ ] Create forms (use [this](https://www.w3schools.com/tags/att_input_accept.asp))
 - [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
     - [x] Create a localhost and replit development environment in insomnia
     - [ ] Add new API endpoints
     - [ ] Add more detail to insomnia config
-- [ ] Add media queries to make site work on mobile
+- [x] Add media queries to make site work on mobile
 - [x] Fix IDE errors
 - [x] Implement clear_data
 - [x] Finish setting up forms
@@ -21,3 +17,7 @@
   - [x] Add FlightPlan to API
 - [x] Make clear.html have a back to main menu button
 - [x] Create import from method for FlightPlan
+- [x] Create a way to save a FlightPlan and then come back to it (using pickle)
+  - [x] Implement API
+  - [x] Implement custom error messages in FlightPlan.import_file_data (not just True or False) (Use Flask Flash?)
+  - [x] Create forms (use [this](https://www.w3schools.com/tags/att_input_accept.asp))

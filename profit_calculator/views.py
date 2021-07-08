@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, Union
 
-from flask import abort, flash, render_template, request
+from flask import Response, abort, flash, render_template, request, url_for
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -55,17 +55,23 @@ def price_plan() -> str:
     in_range: Optional[bool] = fp.flight_in_range()
     if not airport_details_exist:
         flash(
-            r"No airport data has been submitted. This is needed to calculate the profit. Press <a href='{{ url_for('airport_details') }}'>here</a> to enter it.",
+            "No airport data has been submitted. This is needed to calculate the "
+            f"profit. Press <a href='{url_for('airport_details')}'>here</a> to "
+            "enter it.",
             "top-error",
         )
     if not aircraft_details_exist:
         flash(
-            r"No aircraft data has been submitted. This is needed to calculate the profit. Press <a href='{{ url_for('flight_details') }}'>here</a> to enter it.",
+            "No aircraft data has been submitted. This is needed to calculate the "
+            f"profit. Press <a href='{url_for('flight_details')}'>here</a> to "
+            "enter it.",
             "top-error",
         )
     if not in_range:
         flash(
-            r"This route is longer than the range of the aircraft selected. Please change the aircraft <a href='{{ url_for('flight_details') }}'>here</a> or change the route <a href='{{ url_for('airport_details') }}'>here</a>.",
+            "This route is longer than the range of the aircraft selected. Please "
+            f"change the aircraft <a href='{url_for('flight_details')}'>here</a> "
+            f"or change the route <a href='{url_for('airport_details')}'>here</a>.",
             "top-error",
         )
     if (
@@ -101,6 +107,20 @@ def profit_information() -> Optional[str]:
     else:
         abort(418)
         return None
+
+
+@app.route("/exports", methods=["GET", "POST"])
+def export_form() -> Union[str, Response]:
+    if request.method == "POST":
+        if request.form["import/export"] == "import":
+            success: bool
+            err_msg: Optional[str]
+            success, msg = fp.import_from_file(request)
+            if msg:
+                flash(msg, "error" if success is False else "message")
+        elif request.form["import/export"] == "export":
+            return fp.export_as_file()
+    return render_template("exports.html")
 
 
 @app.route("/clear")

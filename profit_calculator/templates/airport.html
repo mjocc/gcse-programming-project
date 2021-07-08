@@ -3,27 +3,25 @@
 {% block title %}Enter airport details{% endblock %}
 
 {% block content %}
-<div class="container p-3">
-	<form action="{{ url_for('airport_details') }}" method="post">
-		<div class="form-group my-3">
-			<label class="mb-1" for="uk-airport">UK Airport</label>
-            <select class="form-select" id="uk-airport" name="uk-airport" required>
-                <option value="" disabled selected hidden>Select an option</option>
-                <option value="LPL">Liverpool John Lennon (LPL)</option>
-                <option value="BOH">Bournemouth International Airport (BOH)</option>
-            </select>
-        </div>
-        <div class="form-group my-3">
-			<label class="mb-1" for="o-airport">Overseas Airport</label>
-            <select class="form-select" id="o-airport" name="o-airport" required>
-                <option value="" disabled selected hidden>Select an option</option>
-                {% for airport in airports %}
-                    <option value="{{ airport.code }}">{{ airport.name }} ({{ airport.code }})</option>
-                {% endfor %}
-            </select>
-        </div>
-        <input class="btn btn-dark my-2" type="submit" />
-        <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
-    </form>
-</div>
+<form action="{{ url_for('airport_details') }}" method="post">
+    <div class="form-group my-3">
+        <label class="mb-1" for="uk-airport">UK Airport</label>
+        <select class="form-select" id="uk-airport" name="uk-airport" required>
+            <option value="" disabled selected hidden>Select an option</option>
+            <option value="LPL">Liverpool John Lennon (LPL)</option>
+            <option value="BOH">Bournemouth International Airport (BOH)</option>
+        </select>
+    </div>
+    <div class="form-group my-3">
+        <label class="mb-1" for="o-airport">Overseas Airport</label>
+        <select class="form-select" id="o-airport" name="o-airport" required>
+            <option value="" disabled selected hidden>Select an option</option>
+            {% for airport in airports %}
+                <option value="{{ airport.code }}">{{ airport.name }} ({{ airport.code }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <input class="btn btn-dark my-2" type="submit" />
+    <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
+</form>
 {% endblock %}

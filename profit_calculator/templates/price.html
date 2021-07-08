@@ -4,28 +4,26 @@
 
 {% block content %}
 <!--suppress HtmlUnknownAttribute -->
-<div class="container p-3">
-     <form action="{{ url_for('price_plan') }}" method="post">
-        <div class="form-group my-3">
-            <label class="mb-1" for="standard-class-price">Price of a standard class seat</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">£</div>
-                </div>
-            <input type="number" step="0.01" min="0" class="form-control" id="standard-class-price" name="standard-class-price" required {% if disable %}disabled{% endif %} />
+ <form action="{{ url_for('price_plan') }}" method="post">
+    <div class="form-group my-3">
+        <label class="mb-1" for="standard-class-price">Price of a standard class seat</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">£</div>
             </div>
+        <input type="number" step="0.01" min="0" class="form-control" id="standard-class-price" name="standard-class-price" required {% if disable %}disabled{% endif %} />
         </div>
-        <div class="form-group my-3">
-            <label class="mb-1" for="first-class-price">Price of a first class seat</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">£</div>
-                </div>
-            <input type="number" step="0.01" min="0" class="form-control" id="first-class-price" name="first-class-price" required {% if disable %}disabled{% endif %} />
+    </div>
+    <div class="form-group my-3">
+        <label class="mb-1" for="first-class-price">Price of a first class seat</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">£</div>
             </div>
+        <input type="number" step="0.01" min="0" class="form-control" id="first-class-price" name="first-class-price" required {% if disable %}disabled{% endif %} />
         </div>
-        <input class="btn btn-dark my-2" type="submit" />
-        <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
-    </form>
-</div>
+    </div>
+    <input class="btn btn-dark my-2" type="submit" />
+    <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
+</form>
 {% endblock %}

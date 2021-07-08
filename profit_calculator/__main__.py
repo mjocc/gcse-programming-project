@@ -2,8 +2,10 @@ import csv
 import io
 import pickle
 import random
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
+from flask import Response, send_file
 from flask.json import JSONEncoder
 from itsdangerous import BadSignature
 
@@ -94,7 +96,7 @@ class FlightPlan:
         self.income: Optional[float] = income
         self.profit: Optional[float] = profit
 
-    def import_from_file(self, request_obj) -> Tuple[bool, Optional[str]]:
+    def import_from_file(self, request_obj) -> Tuple[bool, str]:
         if "flight-plan-file" not in request_obj.files:
             return False, "No flight plan file sent."
         received_file = request_obj.files["flight-plan-file"]
@@ -111,13 +113,20 @@ class FlightPlan:
         if self.aircraft is not None:
             # noinspection PyUnresolvedReferences
             self.aircraft = Aircraft.all[self.aircraft.id]
-        return True, None
+        return True, "Data imported from file successfully."
 
-    def export_as_file(self):
+    def export_as_file(self) -> Response:
         pickled_data = pickle.dumps(self)
         file_data = fp_signer.sign(pickled_data)
         file = io.BytesIO(file_data)
-        return file
+        # noinspection PyArgumentList
+        return send_file(
+            file,
+            mimetype="application/octet-stream",
+            as_attachment=True,
+            download_name="fp.flightplan",
+            last_modified=datetime.now(),
+        )
 
     def airport_details(self, uk_airport, foreign_airport) -> None:
         self.uk_airport = uk_airport
@@ -175,21 +184,20 @@ class FlightPlan:
             else:
                 return -1
 
+    def insert_test_data(self) -> None:
+        self.airport_details(
+            random.choice(["LPL", "BOH"]),
+            random.choice([airport.code for airport in Airport.all.values()]),
+        )
+        self.flight_details(random.choice(Aircraft.all), random.randint(15, 45))
+        self.price_plan(
+            round(random.uniform(25, 75), 2), round(random.uniform(100, 200), 2)
+        )
+
 
 class FlightPlanJSONEncoder(JSONEncoder):
     def default(self, obj) -> str:
         return obj.__dict__
-
-
-def insert_test_data(flight_plan) -> None:
-    flight_plan.airport_details(
-        random.choice(["LPL", "BOH"]),
-        random.choice([airport.code for airport in Airport.all.values()]),
-    )
-    flight_plan.flight_details(random.choice(Aircraft.all), random.randint(15, 45))
-    flight_plan.price_plan(
-        round(random.uniform(25, 75), 2), round(random.uniform(100, 200), 2)
-    )
 
 
 def allowed_file(filename) -> bool:

@@ -4,15 +4,14 @@
 
 {% block content %}
 <!--suppress SyntaxError, HtmlUnknownTag, Annotator, HtmlUnknownAttribute -->
-<div class="container p-3">
-    <table class="table">
-        <tr></tr>
-        {% for key, value in flight_plan.items() %}
-        <tr {% if key == "profit" %}class="{% if profit == 1 %}table-success{% elif profit == 0 %}table-warning{% else %}table-danger{% endif %}"{% endif %}>
-            <th scope="row">{{ key }}</th>
-            <td>{{ value }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+<table class="table">
+    <tr></tr>
+    {% for key, value in flight_plan.items() %}
+    <tr {% if key == "profit" %}class="{% if profit == 1 %}table-success{% elif profit == 0 %}table-warning{% else %}table-danger{% endif %}"{% endif %}>
+        <th scope="row">{{ key }}</th>
+        <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
 {% endblock %}
