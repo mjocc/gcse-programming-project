@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from flask import Response, abort, jsonify, render_template, request, send_file
 
@@ -53,21 +54,23 @@ def insert_test_data() -> Response:
 
 @app.route("/api/import-data", methods=["POST"])
 def import_file_data() -> Response:
-    success: bool = fp.import_from_file(request)
-    return jsonify(success=success)
+    success: bool, err_msg: Optional[str] = fp.import_from_file(request)
+    response_dict = dict(success=success)
+    if err_msg is not None:
+        response_dict[message] = err_msg
+    return jsonify(response_dict)
 
 
 # noinspection PyArgumentList
 @app.route("/api/export-data")
 def export_file_data() -> Response:
-    file, digest = fp.export_as_file()
+    file = fp.export_as_file()
     return send_file(
         file,
         mimetype="application/octet-stream",
         as_attachment=True,
         download_name="fp.flightplan",
         last_modified=datetime.now(),
-        etag=digest,
     )
 
 

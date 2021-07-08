@@ -1,6 +1,7 @@
 - [x] Create a way to save a FlightPlan and then come back to it (using pickle)
   - [x] Implement API
-  - [ ] Create forms
+  - [x] Implement custom error messages in FlightPlan.import_file_data (not just True or False) (Use Flask Flash?)
+  - [ ] Create forms (use [this](https://www.w3schools.com/tags/att_input_accept.asp))
 - [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files

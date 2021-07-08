@@ -5,16 +5,7 @@
 {% block content %}
 <!--suppress HtmlUnknownAttribute -->
 <div class="container p-3">
-    {% if not airport_data %}
-    <div class="alert alert-danger" role="alert">No airport data has been submitted. This is needed to calculate the profit. Press <a href="{{ url_for('airport_details') }}">here</a> to enter it.</div>
-    {% endif %}
-    {% if not aircraft_data %}
-    <div class="alert alert-danger" role="alert">No aircraft data has been submitted. This is needed to calculate the profit. Press <a href="{{ url_for('flight_details') }}">here</a> to enter it.</div>
-    {% endif %}
-    {% if not in_range and in_range is not none %}
-    <div class="alert alert-danger" role="alert">This route is longer than the range of the aircraft selected. Please change the aircraft <a href="{{ url_for('flight_details') }}">here</a> or change the route <a href="{{ url_for('airport_details') }}">here</a>.</div>
-    {% endif %}
-    <form action="{{ url_for('price_plan') }}" method="post">
+     <form action="{{ url_for('price_plan') }}" method="post">
         <div class="form-group my-3">
             <label class="mb-1" for="standard-class-price">Price of a standard class seat</label>
             <div class="input-group">

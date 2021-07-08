@@ -39,12 +39,25 @@
             </nav>
         </header>
         <main>
+            {% with messages = get_flashed_messages(with_categories=true, category_filter=["top-message", "top-error", "top-warning"]) %}
+                {% if messages %}
+                    <div class="container px-3">  
+                    {% for category, message in messages %}
+                    <div class="alert alert-{% if category == 'message' %}success{% elif category == 'error' %}danger{% elif category == 'warning' %}warning{% endif %}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             {% block content %}{% endblock %}
-            {% if submitted %}
-            <div class="container px-3">
-                <div class="alert alert-success" role="alert">Form submitted successfully.</div>
-            </div>
-            {% endif %}
+            {% with messages = get_flashed_messages(with_categories=true, category_filter=["message", "error", "warning"]) %}
+                {% if messages %}
+                    <div class="container px-3">  
+                    {% for category, message in messages %}
+                    <div class="alert alert-{% if category == 'message' %}success{% elif category == 'error' %}danger{% elif category == 'warning' %}warning{% endif %}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </main>
     </section>
     <!--suppress SpellCheckingInspection -->

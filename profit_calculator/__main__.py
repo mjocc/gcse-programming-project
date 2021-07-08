@@ -1,13 +1,13 @@
 import csv
-import hmac
 import io
 import pickle
 import random
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from flask.json import JSONEncoder
+from itsdangerous import BadSignature
 
-from profit_calculator import ALLOWED_EXTENSIONS, app
+from profit_calculator import ALLOWED_EXTENSIONS, fp_signer
 
 
 class Airport:
@@ -94,30 +94,30 @@ class FlightPlan:
         self.income: Optional[float] = income
         self.profit: Optional[float] = profit
 
-    def import_from_file(self, request_obj) -> bool:
+    def import_from_file(self, request_obj) -> Tuple[bool, Optional[str]]:
         if "flight-plan-file" not in request_obj.files:
-            return False
+            return False, "No flight plan file sent."
         received_file = request_obj.files["flight-plan-file"]
-        received_digest, pickled_data = received_file.read().split(
-            b"   "
-        )  # separator is 3 spaces
-        check_digest = hmac.digest(app.secret_key, pickled_data, "sha256")
-        if hmac.compare_digest(received_digest, check_digest):
+        if not allowed_file(received_file.filename):
+            return False, "File does not have an allowed file extension."
+        file_data: bytes = received_file.read()
+        try:
+            pickled_data = fp_signer.unsign(file_data)
             self.__init__(**vars(pickle.loads(pickled_data)))
-        else:
-            return False
+        except BadSignature:
+            return False, "File does not have the correct cryptographic signature."
         if self.foreign_airport is not None:
             self.foreign_airport = Airport.all[self.foreign_airport.code]
         if self.aircraft is not None:
             # noinspection PyUnresolvedReferences
             self.aircraft = Aircraft.all[self.aircraft.id]
-        return True
+        return True, None
 
     def export_as_file(self):
         pickled_data = pickle.dumps(self)
-        digest = hmac.digest(app.secret_key, pickled_data, "sha256")
-        file = io.BytesIO(digest + b"   " + pickled_data)
-        return file, digest  # File must be closed after use
+        file_data = fp_signer.sign(pickled_data)
+        file = io.BytesIO(file_data)
+        return file
 
     def airport_details(self, uk_airport, foreign_airport) -> None:
         self.uk_airport = uk_airport

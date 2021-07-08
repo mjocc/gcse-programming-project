@@ -1,6 +1,6 @@
 from typing import Optional
 
-from flask import abort, render_template, request
+from flask import abort, flash, render_template, request
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -21,12 +21,8 @@ def index() -> str:
 def airport_details() -> str:
     if request.method == "POST":
         fp.airport_details(request.form["uk-airport"], request.form["o-airport"])
-        submitted = True
-    else:
-        submitted = False
-    return render_template(
-        "airport.html", airports=Airport.all.values(), submitted=submitted
-    )
+        flash("Form submitted successfully.")
+    return render_template("airport.html", airports=Airport.all.values())
 
 
 @app.route("/flight", methods=["GET", "POST"])
@@ -36,9 +32,7 @@ def flight_details() -> str:
             Aircraft.all[int(request.form["aircraft-type"])],
             request.form["first-class-seats"],
         )
-        submitted = True
-    else:
-        submitted = False
+        flash("Form submitted successfully.")
     return render_template(
         "flight.html",
         aircrafts=Aircraft.all,
@@ -46,7 +40,6 @@ def flight_details() -> str:
             [aircraft.max_standard_class, aircraft.min_first_class]
             for aircraft in Aircraft.all
         ],
-        submitted=submitted,
     )
 
 
@@ -56,12 +49,25 @@ def price_plan() -> str:
         fp.price_plan(
             request.form["standard-class-price"], request.form["first-class-price"]
         )
-        submitted = True
-    else:
-        submitted = False
+        flash("Form submitted successfully.")
     airport_details_exist: bool = fp.airport_details_exist()
     aircraft_details_exist: bool = fp.flight_details_exist()
     in_range: Optional[bool] = fp.flight_in_range()
+    if not airport_details_exist:
+        flash(
+            r"No airport data has been submitted. This is needed to calculate the profit. Press <a href='{{ url_for('airport_details') }}'>here</a> to enter it.",
+            "top-error",
+        )
+    if not aircraft_details_exist:
+        flash(
+            r"No aircraft data has been submitted. This is needed to calculate the profit. Press <a href='{{ url_for('flight_details') }}'>here</a> to enter it.",
+            "top-error",
+        )
+    if not in_range:
+        flash(
+            r"This route is longer than the range of the aircraft selected. Please change the aircraft <a href='{{ url_for('flight_details') }}'>here</a> or change the route <a href='{{ url_for('airport_details') }}'>here</a>.",
+            "top-error",
+        )
     if (
         not airport_details_exist
         or not aircraft_details_exist
@@ -73,11 +79,7 @@ def price_plan() -> str:
         disable_form = False
     return render_template(
         "price.html",
-        airport_data=airport_details_exist,
-        aircraft_data=aircraft_details_exist,
-        in_range=in_range,
         disable=disable_form,
-        submitted=submitted,
     )
 
 
@@ -97,7 +99,7 @@ def profit_information() -> Optional[str]:
             "profit.html", flight_plan=fp_dict, profit=fp.profit_made()
         )
     else:
-        abort(409)
+        abort(418)
         return None
 
 
