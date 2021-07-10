@@ -3,12 +3,12 @@
 {% block title %}Export/import flight plan as file{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column container-fluid">
+<div class="d-flex flex-column pt-3">
     <form class="d-flex flex-column" action="{{ url_for('export_form') }}" method="post">
         <input type="hidden" name="import/export" value="export" />
-        <input class="btn btn-dark m-2 btn-block" type="submit" value="Export data"/>
+        <input class="btn btn-dark my-2 btn-block" type="submit" value="Export data"/>
     </form>
-    <button class="btn btn-dark m-2"  data-toggle="dropdown">Import data</button>
+    <button class="btn btn-dark my-2"  data-toggle="dropdown">Import data</button>
     <div class="dropdown-menu container" id="dropdown-form-container">
             <form class="px-4 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
                 <div class="form-group my-2">
