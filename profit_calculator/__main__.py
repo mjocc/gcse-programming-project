@@ -128,21 +128,23 @@ class FlightPlan:
             last_modified=datetime.now(),
         )
 
-    def airport_details(self, uk_airport, foreign_airport) -> None:
+    def airport_details(self, uk_airport, foreign_airport) -> Tuple[bool, str]:
         self.uk_airport = uk_airport
         self.foreign_airport = Airport.all[foreign_airport]
         if self.uk_airport == "LPL":
             self.distance = self.foreign_airport.distance_from_lpl
         elif self.uk_airport == "BOH":
             self.distance = self.foreign_airport.distance_from_boh
+        return True, "Form submitted successfully."
 
     def airport_details_exist(self) -> bool:
         return self.uk_airport is not None and self.foreign_airport is not None
 
-    def flight_details(self, aircraft, no_first_class) -> None:
+    def flight_details(self, aircraft, no_first_class) -> Tuple[bool, str]:
         self.aircraft = aircraft
         self.no_first_class = int(no_first_class)
         self.no_standard_class = aircraft.max_standard_class - self.no_first_class * 2
+        return True, "Form submitted successfully."
 
     def flight_details_exist(self) -> bool:
         return self.aircraft is not None and self.no_first_class is not None
@@ -153,7 +155,7 @@ class FlightPlan:
         else:
             return None
 
-    def price_plan(self, standard_class_price, first_class_price) -> None:
+    def price_plan(self, standard_class_price, first_class_price) -> Tuple[bool, str]:
         self.standard_class_price = float(standard_class_price)
         self.first_class_price = float(first_class_price)
         self.cost_per_seat = self.aircraft.running_cost * (self.distance / 100)
@@ -165,6 +167,7 @@ class FlightPlan:
             + self.no_standard_class * self.standard_class_price
         )
         self.profit = float(self.income - self.running_cost)
+        return True, "Form submitted successfully."
 
     def complete(self) -> bool:
         return (

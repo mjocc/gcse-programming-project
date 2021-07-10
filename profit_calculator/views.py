@@ -20,19 +20,19 @@ def index() -> str:
 @app.route("/airport", methods=["GET", "POST"])
 def airport_details() -> str:
     if request.method == "POST":
-        fp.airport_details(request.form["uk-airport"], request.form["o-airport"])
-        flash("Form submitted successfully.")
+        success, msg = fp.airport_details(request.form["uk-airport"], request.form["o-airport"])
+        flash(msg, "message" if success else "error")
     return render_template("airport.html", airports=Airport.all.values())
 
 
 @app.route("/flight", methods=["GET", "POST"])
 def flight_details() -> str:
     if request.method == "POST":
-        fp.flight_details(
+        success, msg = fp.flight_details(
             Aircraft.all[int(request.form["aircraft-type"])],
             request.form["first-class-seats"],
         )
-        flash("Form submitted successfully.")
+        flash(msg, "message" if success else "error")
     return render_template(
         "flight.html",
         aircrafts=Aircraft.all,
@@ -46,10 +46,10 @@ def flight_details() -> str:
 @app.route("/price", methods=["GET", "POST"])
 def price_plan() -> str:
     if request.method == "POST":
-        fp.price_plan(
+        success, msg = fp.price_plan(
             request.form["standard-class-price"], request.form["first-class-price"]
         )
-        flash("Form submitted successfully.")
+        flash(msg, "message" if success else "error")
     airport_details_exist: bool = fp.airport_details_exist()
     aircraft_details_exist: bool = fp.flight_details_exist()
     in_range: Optional[bool] = fp.flight_in_range()

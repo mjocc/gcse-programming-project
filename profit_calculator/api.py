@@ -1,5 +1,3 @@
-from typing import Optional
-
 from flask import Response, abort, jsonify, render_template, request, send_file
 
 from profit_calculator import app
