@@ -1,6 +1,7 @@
 from typing import Tuple
 
-from flask import Response, abort, jsonify, render_template, request, send_file
+from flask import (Response, jsonify, redirect, render_template, request,
+                   send_file, url_for)
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -14,7 +15,8 @@ def get_api_docs() -> str:
 
 @app.route("/logo.png")  # Needed for Insomnia Documenter to work
 def get_logo() -> Response:
-    return send_file("static/api-docs/logo.png")
+    return redirect(url_for("static", filename="api-docs/logo.png"))
+    # return send_file("static/api-docs/logo.png")
 
 
 @app.route("/api/config")

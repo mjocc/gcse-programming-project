@@ -1,8 +1,8 @@
-- [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
+- [x] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
     - [x] Create a localhost and replit development environment in insomnia
-    - [ ] Add new API endpoints
-    - [ ] Add more detail to insomnia config
+    - [x] Add new API endpoints
+    - [x] Add more detail to insomnia config
 - [x] Add media queries to make site work on mobile
 - [x] Fix IDE errors
 - [x] Implement clear_data
