@@ -129,50 +129,110 @@ class FlightPlan:
         )
 
     def airport_details(self, uk_airport, foreign_airport) -> Tuple[bool, str]:
+        if uk_airport not in ["LPL", "BOH"]:
+            return False, "Not a valid UK airport code."
+
+        if foreign_airport in [airport.code for airport in Airport.all.values()]:
+            foreign_airport = Airport.all[foreign_airport]
+        else:
+            return False, "Not a valid foreign airport code"
+
         self.uk_airport = uk_airport
-        self.foreign_airport = Airport.all[foreign_airport]
+        self.foreign_airport = foreign_airport
         if self.uk_airport == "LPL":
             self.distance = self.foreign_airport.distance_from_lpl
         elif self.uk_airport == "BOH":
             self.distance = self.foreign_airport.distance_from_boh
+
         return True, "Form submitted successfully."
 
     def airport_details_exist(self) -> bool:
         return self.uk_airport is not None and self.foreign_airport is not None
 
-    def flight_details(self, aircraft, no_first_class) -> Tuple[bool, str]:
+    def flight_details(self, aircraft_id, no_first_class) -> Tuple[bool, str]:
+        try:
+            aircraft_id = int(aircraft_id)
+        except ValueError:
+            return False, "Not a valid aircraft id."
+        if aircraft_id in [craft.id for craft in Aircraft.all]:
+            aircraft = Aircraft.all[aircraft_id]
+        else:
+            return False, "Not a valid aircraft id."
+
+        try:
+            no_first_class = int(no_first_class)
+        except ValueError:
+            return False, "Not a valid number of first class seats."
+        if (
+            no_first_class > aircraft.max_standard_class / 2
+            or no_first_class < aircraft.min_first_class
+        ):
+            return False, "Not a valid number of first class seats."
+
         self.aircraft = aircraft
-        self.no_first_class = int(no_first_class)
-        self.no_standard_class = aircraft.max_standard_class - self.no_first_class * 2
+        self.no_first_class = no_first_class
+        self.no_standard_class = aircraft.max_standard_class - no_first_class * 2
+
         return True, "Form submitted successfully."
 
-    def flight_details_exist(self) -> bool:
+    def aircraft_details_exist(self) -> bool:
         return self.aircraft is not None and self.no_first_class is not None
 
     def flight_in_range(self) -> Optional[bool]:
-        if self.airport_details_exist() and self.flight_details_exist():
+        if self.airport_details_exist() and self.aircraft_details_exist():
             return self.aircraft.range > self.distance
         else:
             return None
 
     def price_plan(self, standard_class_price, first_class_price) -> Tuple[bool, str]:
-        self.standard_class_price = float(standard_class_price)
-        self.first_class_price = float(first_class_price)
+        in_range: Optional[bool] = self.flight_in_range()
+        if (
+            not self.airport_details_exist()
+            or not self.aircraft_details_exist()
+            or not in_range
+            or in_range is None
+        ):
+            return (
+                False,
+                "Other information must be submitted first before completing "
+                "this form.",
+            )
+
+        if standard_class_price[::-1].find(".") > 2:
+            return False, "Not a valid standard class price."
+        try:
+            standard_class_price = float(standard_class_price)
+        except ValueError:
+            return False, "Not a valid standard class price."
+        if standard_class_price < 0:
+            return False, "Not a valid standard class price."
+
+        if first_class_price[::-1].find(".") > 2:
+            return False, "Not a valid first class price."
+        try:
+            first_class_price = float(first_class_price)
+        except ValueError:
+            return False, "Not a valid first class price."
+        if first_class_price < 0:
+            return False, "Not a valid first class price."
+
+        self.standard_class_price = standard_class_price
+        self.first_class_price = first_class_price
         self.cost_per_seat = self.aircraft.running_cost * (self.distance / 100)
-        self.running_cost = float(
-            self.cost_per_seat * (self.no_first_class + self.no_standard_class)
+        self.running_cost = self.cost_per_seat * (
+            self.no_first_class + self.no_standard_class
         )
-        self.income = float(
+        self.income = (
             self.no_first_class * self.first_class_price
             + self.no_standard_class * self.standard_class_price
         )
-        self.profit = float(self.income - self.running_cost)
+        self.profit = self.income - self.running_cost
         return True, "Form submitted successfully."
 
     def complete(self) -> bool:
         return (
             self.airport_details_exist()
-            and self.flight_details_exist()
+            and self.aircraft_details_exist()
             and self.flight_in_range()
             and self.standard_class_price is not None
             and self.first_class_price is not None

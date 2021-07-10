@@ -1,4 +1,3 @@
-- [ ] Implement server side form validation
 - [ ] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
     - [x] Create a localhost and replit development environment in insomnia
@@ -21,3 +20,4 @@
   - [x] Implement API
   - [x] Implement custom error messages in FlightPlan.import_file_data (not just True or False) (Use Flask Flash?)
   - [x] Create forms (use [this](https://www.w3schools.com/tags/att_input_accept.asp))
+- [x] Implement server side form validation

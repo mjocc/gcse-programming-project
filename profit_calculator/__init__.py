@@ -19,8 +19,7 @@ ALLOWED_EXTENSIONS = {"flightplan"}
 fp_signer = Signer(app.secret_key, salt="export-fp-file")
 
 from profit_calculator.__main__ import FlightPlan  # noqa
-from profit_calculator.__main__ import (Aircraft, Airport,  # noqa
-                                        FlightPlanJSONEncoder)
+from profit_calculator.__main__ import Aircraft, Airport, FlightPlanJSONEncoder  # noqa
 
 Airport.import_data()
 Aircraft.import_data()

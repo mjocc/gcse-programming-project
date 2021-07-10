@@ -20,7 +20,9 @@ def index() -> str:
 @app.route("/airport", methods=["GET", "POST"])
 def airport_details() -> str:
     if request.method == "POST":
-        success, msg = fp.airport_details(request.form["uk-airport"], request.form["o-airport"])
+        success, msg = fp.airport_details(
+            request.form["uk-airport"], request.form["o-airport"]
+        )
         flash(msg, "message" if success else "error")
     return render_template("airport.html", airports=Airport.all.values())
 
@@ -29,7 +31,7 @@ def airport_details() -> str:
 def flight_details() -> str:
     if request.method == "POST":
         success, msg = fp.flight_details(
-            Aircraft.all[int(request.form["aircraft-type"])],
+            request.form["aircraft-type"],
             request.form["first-class-seats"],
         )
         flash(msg, "message" if success else "error")
@@ -51,7 +53,7 @@ def price_plan() -> str:
         )
         flash(msg, "message" if success else "error")
     airport_details_exist: bool = fp.airport_details_exist()
-    aircraft_details_exist: bool = fp.flight_details_exist()
+    aircraft_details_exist: bool = fp.aircraft_details_exist()
     in_range: Optional[bool] = fp.flight_in_range()
     if not airport_details_exist:
         flash(
@@ -67,7 +69,7 @@ def price_plan() -> str:
             "enter it.",
             "top-error",
         )
-    if not in_range:
+    if aircraft_details_exist and airport_details_exist and not in_range:
         flash(
             "This route is longer than the range of the aircraft selected. Please "
             f"change the aircraft <a href='{url_for('flight_details')}'>here</a> "
@@ -114,7 +116,7 @@ def export_form() -> Union[str, Response]:
     if request.method == "POST":
         if request.form["import/export"] == "import":
             success: bool
-            err_msg: Optional[str]
+            msg: Optional[str]
             success, msg = fp.import_from_file(request)
             if msg:
                 flash(msg, "error" if success is False else "message")
