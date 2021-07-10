@@ -50,14 +50,14 @@ def insert_test_data() -> Response:
 
 
 @app.route("/api/import-data", methods=["POST"])
-def import_file_data() -> Response:
+def import_file_data() -> Tuple[Response, int]:
     success: bool
     err_msg: str
     success, err_msg = fp.import_from_file(request)
     response_dict = dict(success=success)
     if success is False:
         response_dict["message"] = err_msg
-    return jsonify(response_dict)
+    return jsonify(response_dict), 200 if success else 400
 
 
 @app.route("/api/export-data")

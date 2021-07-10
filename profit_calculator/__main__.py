@@ -5,7 +5,7 @@ import random
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from flask import Response, send_file
+from flask import Request, Response, send_file
 from flask.json import JSONEncoder
 from itsdangerous import BadSignature
 
@@ -96,7 +96,7 @@ class FlightPlan:
         self.income: Optional[float] = income
         self.profit: Optional[float] = profit
 
-    def import_from_file(self, request_obj) -> Tuple[bool, str]:
+    def import_from_file(self, request_obj: Request) -> Tuple[bool, str]:
         if "flight-plan-file" not in request_obj.files:
             return False, "No flight plan file sent."
         received_file = request_obj.files["flight-plan-file"]
@@ -128,7 +128,9 @@ class FlightPlan:
             last_modified=datetime.now(),
         )
 
-    def airport_details(self, uk_airport, foreign_airport) -> Tuple[bool, str]:
+    def airport_details(
+        self, uk_airport: str, foreign_airport: str
+    ) -> Tuple[bool, str]:
         if uk_airport not in ["LPL", "BOH"]:
             return False, "Not a valid UK airport code."
 
@@ -149,7 +151,7 @@ class FlightPlan:
     def airport_details_exist(self) -> bool:
         return self.uk_airport is not None and self.foreign_airport is not None
 
-    def flight_details(self, aircraft_id, no_first_class) -> Tuple[bool, str]:
+    def flight_details(self, aircraft_id: str, no_first_class: str) -> Tuple[bool, str]:
         try:
             aircraft_id = int(aircraft_id)
         except ValueError:
@@ -184,7 +186,9 @@ class FlightPlan:
         else:
             return None
 
-    def price_plan(self, standard_class_price, first_class_price) -> Tuple[bool, str]:
+    def price_plan(
+        self, standard_class_price: str, first_class_price: str
+    ) -> Tuple[bool, str]:
         in_range: Optional[bool] = self.flight_in_range()
         if (
             not self.airport_details_exist()
@@ -252,9 +256,12 @@ class FlightPlan:
             random.choice(["LPL", "BOH"]),
             random.choice([airport.code for airport in Airport.all.values()]),
         )
-        self.flight_details(random.choice(Aircraft.all), random.randint(15, 45))
+        self.flight_details(
+            str(random.randint(0, len(Aircraft.all))), str(random.randint(15, 45))
+        )
         self.price_plan(
-            round(random.uniform(25, 75), 2), round(random.uniform(100, 200), 2)
+            str(round(random.uniform(25, 75), 2)),
+            str(round(random.uniform(100, 200), 2)),
         )
 
 
