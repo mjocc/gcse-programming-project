@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from flask import Response, abort, jsonify, render_template, request, send_file
 
 from profit_calculator import app
@@ -21,19 +23,19 @@ def get_api_config() -> Response:
 
 
 @app.route("/api/airport/<airport_code>")
-def get_airport_data(airport_code) -> Response:
+def get_airport_data(airport_code) -> Tuple[Response, int]:
     try:
-        return jsonify(vars(Airport.all[airport_code.upper()]))
+        return jsonify(vars(Airport.all[airport_code.upper()])), 200
     except KeyError:
-        abort(404)
+        return jsonify(success=False, message="Invalid airport code."), 404
 
 
 @app.route("/api/aircraft/<int:aircraft_id>")
-def get_aircraft_data(aircraft_id) -> Response:
+def get_aircraft_data(aircraft_id) -> Tuple[Response, int]:
     try:
-        return jsonify(vars(Aircraft.all[aircraft_id]))
-    except KeyError:
-        abort(404)
+        return jsonify(vars(Aircraft.all[aircraft_id])), 200
+    except IndexError:
+        return jsonify(success=False, message="Invalid aircraft id."), 404
 
 
 @app.route("/api/flight-plan")
