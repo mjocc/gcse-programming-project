@@ -58,6 +58,27 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
+            {% with form_submit = get_flashed_messages(category_filter=["form-submit"]) %}
+                {% if form_submit %}
+                    <div class= "mt-2 alert alert-success" role="alert">Form submitted successfully. <a data-toggle="collapse" href="#page-data-table" id="page-data-text">Show received/calculated data.</a></div>
+                {% endif %}
+            {% endwith %}
+            {% with page_data = get_flashed_messages(category_filter=["page-data"]) %}
+                {% if page_data %}
+                    {% with data = page_data[0] %}
+                    <div id="page-data-table" class="alert alert-secondary collapse">
+                        <table class="table table-hover">
+                            {% for key, value in data.items() %}
+                            <tr>
+                                <th scope="row">{{ key }}</th>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {% endwith %}
+                {% endif %}
+            {% endwith %}
         </main>
     </section>
     <!--suppress SpellCheckingInspection -->
@@ -67,6 +88,11 @@
     <!--suppress SpellCheckingInspection -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        $('#page-data-table').on('show.bs.collapse', () => {
+            $('#page-data-text').remove()
+        });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

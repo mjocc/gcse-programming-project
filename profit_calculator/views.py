@@ -23,7 +23,17 @@ def airport_details() -> str:
         success, msg = fp.airport_details(
             request.form["uk-airport"], request.form["o-airport"]
         )
-        flash(msg, "message" if success else "error")
+        flash(msg, "form-submit" if success else "error")
+        if success:
+            flash(
+                {
+                    "uk_airport": fp.uk_airport,
+                    "foreign_airport_code": fp.foreign_airport.code,
+                    "foreign_airport_name": fp.foreign_airport.name,
+                    "distance_between_airports": fp.distance,
+                },
+                "page-data",
+            )
     return render_template("airport.html", airports=Airport.all.values())
 
 
@@ -35,14 +45,16 @@ def flight_details() -> str:
             request.form["aircraft-type"],
             request.form["first-class-seats"],
         )
-        flash(msg, "message" if success else "error")
-        page_data["submitted"] = success
+        flash(msg, "form-submit" if success else "error")
         if success:
-            page_data["selected_aircraft"] = {
-                **vars(fp.aircraft).copy(),
-                "number_of_first_class": fp.no_first_class,
-                "number_of_standard_class": fp.no_standard_class,
-            }
+            flash(
+                {
+                    **vars(fp.aircraft),
+                    "number_of_first_class": fp.no_first_class,
+                    "number_of_standard_class": fp.no_standard_class,
+                },
+                "page-data",
+            )
     return render_template(
         "flight.html",
         aircrafts=Aircraft.all,
@@ -50,7 +62,6 @@ def flight_details() -> str:
             [aircraft.max_standard_class, aircraft.min_first_class]
             for aircraft in Aircraft.all
         ],
-        **page_data,
     )
 
 
@@ -60,7 +71,19 @@ def price_plan() -> str:
         success, msg = fp.price_plan(
             request.form["standard-class-price"], request.form["first-class-price"]
         )
-        flash(msg, "message" if success else "error")
+        flash(msg, "form-submit" if success else "error")
+        if success:
+            flash(
+                {
+                    "standard_class_price": fp.standard_class_price,
+                    "first_class_price": fp.first_class_price,
+                    "cost_per_seat": fp.cost_per_seat,
+                    "running_cost": fp.running_cost,
+                    "income": fp.income,
+                    "profit": fp.profit,
+                },
+                "page-data",
+            )
     airport_details_exist: bool = fp.airport_details_exist()
     aircraft_details_exist: bool = fp.aircraft_details_exist()
     in_range: Optional[bool] = fp.flight_in_range()
@@ -124,10 +147,9 @@ def export_form() -> Union[str, Response]:
     if request.method == "POST":
         if request.form["import/export"] == "import":
             success: bool
-            msg: Optional[str]
+            msg: str
             success, msg = fp.import_from_file(request)
-            if msg:
-                flash(msg, "error" if success is False else "message")
+            flash(msg, "message" if success else "error")
         elif request.form["import/export"] == "export":
             return fp.export_as_file()
     return render_template("exports.html")

@@ -130,7 +130,7 @@ class FlightPlan:
 
     def airport_details(
         self, uk_airport: str, foreign_airport: str
-    ) -> Tuple[bool, str]:
+    ) -> Tuple[bool, Optional[str]]:
         if uk_airport not in ["LPL", "BOH"]:
             return False, "Not a valid UK airport code."
 
@@ -146,12 +146,14 @@ class FlightPlan:
         elif self.uk_airport == "BOH":
             self.distance = self.foreign_airport.distance_from_boh
 
-        return True, "Form submitted successfully."
+        return True, None
 
     def airport_details_exist(self) -> bool:
         return self.uk_airport is not None and self.foreign_airport is not None
 
-    def flight_details(self, aircraft_id: str, no_first_class: str) -> Tuple[bool, str]:
+    def flight_details(
+        self, aircraft_id: str, no_first_class: str
+    ) -> Tuple[bool, Optional[str]]:
         try:
             aircraft_id = int(aircraft_id)
         except ValueError:
@@ -183,7 +185,7 @@ class FlightPlan:
         self.no_first_class = no_first_class
         self.no_standard_class = aircraft.max_standard_class - no_first_class * 2
 
-        return True, "Form submitted successfully."
+        return True, None
 
     def aircraft_details_exist(self) -> bool:
         return self.aircraft is not None and self.no_first_class is not None
@@ -196,7 +198,7 @@ class FlightPlan:
 
     def price_plan(
         self, standard_class_price: str, first_class_price: str
-    ) -> Tuple[bool, str]:
+    ) -> Tuple[bool, Optional[str]]:
         in_range: Optional[bool] = self.flight_in_range()
         if (
             not self.airport_details_exist()
@@ -239,7 +241,7 @@ class FlightPlan:
             + self.no_standard_class * self.standard_class_price
         )
         self.profit = self.income - self.running_cost
-        return True, "Form submitted successfully."
+        return True, None
 
     def complete(self) -> bool:
         return (

@@ -21,20 +21,7 @@
     <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
 </form>
 
-{% if submitted %}
-<hr>
-<h5>Chosen aircraft:</h5>
-<table class="table table-hover">
-    <tr></tr>
-    {% for key, value in selected_aircraft.items() %}
-    <tr>
-        <th scope="row">{{ key }}</th>
-        <td>{{ value }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<hr>
-{% endif %}
+
 {% endblock %}
 
 {% block scripts %}
