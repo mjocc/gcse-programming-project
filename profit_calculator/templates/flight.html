@@ -26,19 +26,16 @@
 
 {% block scripts %}
 <script>
-    $(function() {
-        const aircraftData = {{ aircraft_data|tojson|safe  }};
-        const aircraftType = $('#aircraft-type');
-        const firstClassSeats = $('#first-class-seats');
-        aircraftType.change(() => {
-            firstClassSeats.prop("disabled", false);
-            let aircraftTypeIndex = aircraftType.val();
-            let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
-            let maxFirstClass = maxStandardClass / 2;
-            firstClassSeats
-                .prop("min", minFirstClass)
-                .prop("max", maxFirstClass);
-        });
+    const aircraftData = {{ aircraft_data|tojson|safe  }};
+    const aircraftType = document.querySelector('#aircraft-type');
+    const firstClassSeats = document.querySelector('#first-class-seats');
+    aircraftType.addEventListener("change", () => {
+        firstClassSeats.removeAttribute("disabled");
+        let aircraftTypeIndex = aircraftType.value;
+        let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
+        let maxFirstClass = maxStandardClass / 2;
+        firstClassSeats.setAttribute("min", minFirstClass);
+        firstClassSeats.setAttribute("max", maxFirstClass);
     });
 </script>
 {% endblock %}

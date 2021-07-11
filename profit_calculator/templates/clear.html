@@ -11,33 +11,36 @@
 {% block head %}
 <script>
     function showMessage(messageClass, messageText){
-        $('#success-message')
-            .removeClass('alert-danger')
-            .addClass(messageClass)
-            .text(messageText)
-            .removeClass('invisible');
-        $('.visible')
-            .removeClass('visible')
-            .addClass('invisible');
-        $('#main-button')
-            .replaceWith('<a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>')
-        $('#profit-dropdown-button')
-            .remove()
+        sm = document.querySelector('#success-message');
+        sm.classList.remove('alert-danger');
+        sm.classList.add(messageClass);
+        sm.textContent = messageText;
+        sm.classList.remove('invisible');
+
+        document.querySelectorAll('.visible').forEach((node) => {
+            node.classList.remove('visible');
+            node.classList.add('invisible');
+        });
+
+        mb = document.querySelector('#main-button')
+        newMb = document.createElement('a')
+        newMb.setAttribute('href', '{{ url_for('index') }}')
+        newMb.classList.add('btn', 'btn-dark');
+        newMb.textContent = 'Back to Main Menu';
+        mb.parentNode.replaceChild(newMb, mb);
     }
 
     function deleteData() {
-        console.log("test")
-        $.ajax({
-            url: '{{ url_for('clear_data') }}',
-            type: 'DELETE',
-            success: (result) => {
-                if (result.success) {
+        fetch('{{ url_for('clear_data') }}', {method: 'DELETE'})
+            .then(response => {
+                return response.json();
+            }).then(json => {
+                if (json.success) {
                     showMessage('alert-success', 'Data cleared successfully.');
                 } else {
                     showMessage('alert-danger', 'Something went wrong. Please try again.');
                 }
-            }
-        });
+            });
     }
 </script>
 {% endblock %}

@@ -1,5 +1,8 @@
 - [ ] Add bootstrap styles to client-side form validation
-- [ ] Remove jQuery dependency
+- [x] Remove jQuery dependency
+  - [x] base.html
+  - [x] flight.html
+  - [x] clear.html
 - [x] Document api (see [here](https://github.com/jozsefsallai/insomnia-documenter))
     - [x] Fix documentation files
     - [x] Create a localhost and replit development environment in insomnia
