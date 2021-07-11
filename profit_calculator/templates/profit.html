@@ -4,7 +4,7 @@
 
 {% block content %}
 <!--suppress SyntaxError, HtmlUnknownTag, Annotator, HtmlUnknownAttribute -->
-<table class="table">
+<table class="table table-hover">
     <tr></tr>
     {% for key, value in flight_plan.items() %}
     <tr {% if key == "profit" %}class="{% if profit == 1 %}table-success{% elif profit == 0 %}table-warning{% else %}table-danger{% endif %}"{% endif %}>

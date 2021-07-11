@@ -1,7 +1,14 @@
 from typing import Tuple
 
-from flask import (Response, jsonify, redirect, render_template, request,
-                   send_file, url_for)
+from flask import (
+    Response,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -21,7 +28,7 @@ def get_logo() -> Response:
 
 @app.route("/api/config")
 def get_api_config() -> Response:
-    return send_file("static/api-docs/insomnia.json")
+    return send_file(url_for("static", filename="api-docs/insomnia.json"))
 
 
 @app.route("/api/airport/<airport_code>")

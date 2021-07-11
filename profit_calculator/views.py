@@ -29,12 +29,20 @@ def airport_details() -> str:
 
 @app.route("/flight", methods=["GET", "POST"])
 def flight_details() -> str:
+    page_data: dict = {}
     if request.method == "POST":
         success, msg = fp.flight_details(
             request.form["aircraft-type"],
             request.form["first-class-seats"],
         )
         flash(msg, "message" if success else "error")
+        page_data["submitted"] = success
+        if success:
+            page_data["selected_aircraft"] = {
+                **vars(fp.aircraft).copy(),
+                "number_of_first_class": fp.no_first_class,
+                "number_of_standard_class": fp.no_standard_class,
+            }
     return render_template(
         "flight.html",
         aircrafts=Aircraft.all,
@@ -42,6 +50,7 @@ def flight_details() -> str:
             [aircraft.max_standard_class, aircraft.min_first_class]
             for aircraft in Aircraft.all
         ],
+        **page_data,
     )
 
 
@@ -57,21 +66,21 @@ def price_plan() -> str:
     in_range: Optional[bool] = fp.flight_in_range()
     if not airport_details_exist:
         flash(
-            "No airport data has been submitted. This is needed to calculate the "
+            f"No airport data has been submitted. This is needed to calculate the "
             f"profit. Press <a href='{url_for('airport_details')}'>here</a> to "
-            "enter it.",
+            f"enter it.",
             "top-error",
         )
     if not aircraft_details_exist:
         flash(
-            "No aircraft data has been submitted. This is needed to calculate the "
+            f"No aircraft data has been submitted. This is needed to calculate the "
             f"profit. Press <a href='{url_for('flight_details')}'>here</a> to "
-            "enter it.",
+            f"enter it.",
             "top-error",
         )
     if aircraft_details_exist and airport_details_exist and not in_range:
         flash(
-            "This route is longer than the range of the aircraft selected. Please "
+            f"This route is longer than the range of the aircraft selected. Please "
             f"change the aircraft <a href='{url_for('flight_details')}'>here</a> "
             f"or change the route <a href='{url_for('airport_details')}'>here</a>.",
             "top-error",

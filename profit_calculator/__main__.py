@@ -164,12 +164,20 @@ class FlightPlan:
         try:
             no_first_class = int(no_first_class)
         except ValueError:
-            return False, "Not a valid number of first class seats."
-        if (
-            no_first_class > aircraft.max_standard_class / 2
-            or no_first_class < aircraft.min_first_class
-        ):
-            return False, "Not a valid number of first class seats."
+            return False, "Not a valid number of first class seats - not a number."
+        if no_first_class > aircraft.max_standard_class / 2:
+            return (
+                False,
+                f"Too many first class seats - there must be less than "
+                f"{aircraft.max_standard_class / 2} first class seats for "
+                f"this aircraft.",
+            )
+        elif no_first_class < aircraft.min_first_class:
+            return (
+                False,
+                f"Too little first class seats - there must be more than "
+                f"{aircraft.min_first_class} first class seats for this aircraft.",
+            )
 
         self.aircraft = aircraft
         self.no_first_class = no_first_class
@@ -198,27 +206,27 @@ class FlightPlan:
         ):
             return (
                 False,
-                "Other information must be submitted first before completing "
+                "All other information must be submitted first before completing "
                 "this form.",
             )
 
         if standard_class_price[::-1].find(".") > 2:
-            return False, "Not a valid standard class price."
+            return False, "Not a valid standard class price - too many decimal places."
         try:
             standard_class_price = float(standard_class_price)
         except ValueError:
-            return False, "Not a valid standard class price."
+            return False, "Not a valid standard class price - not a number."
         if standard_class_price < 0:
-            return False, "Not a valid standard class price."
+            return False, "Not a valid standard class price - cannot be less than 0."
 
         if first_class_price[::-1].find(".") > 2:
-            return False, "Not a valid first class price."
+            return False, "Not a valid first class price - too many decimal places."
         try:
             first_class_price = float(first_class_price)
         except ValueError:
-            return False, "Not a valid first class price."
+            return False, "Not a valid first class price - not a number."
         if first_class_price < 0:
-            return False, "Not a valid first class price."
+            return False, "Not a valid first class price - cannot be less than 0."
 
         self.standard_class_price = standard_class_price
         self.first_class_price = first_class_price
