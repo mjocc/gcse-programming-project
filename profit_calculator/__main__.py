@@ -49,7 +49,7 @@ class Aircraft:
         self.range: float = float(range)
         self.max_standard_class: int = int(max_standard_class)
         self.min_first_class: int = int(min_first_class)
-        self.id = id
+        self.id: int = id
 
     def __repr__(self) -> str:
         return f"Aircraft: {self.type} ({self.id})"
@@ -96,12 +96,14 @@ class FlightPlan:
         self.income: Optional[float] = income
         self.profit: Optional[float] = profit
 
-    def return_dict(self) -> dict:
+    def readable_dict(self) -> dict:
         fp_dict = vars(self).copy()
         for key, value in fp_dict.items():
-            if isinstance(value, float) and key not in ["distance"]:
-                fp_dict[key] = "£{:,.2f}".format(value)
-        fp_dict["distance"] = f"{fp_dict['distance']} km"
+            if isinstance(value, float):
+                if key not in ["distance"]:
+                    fp_dict[key] = "£{:,.2f}".format(value)
+                elif key == "distance":
+                    fp_dict["distance"] = f"{fp_dict['distance']} km"
         if fp_dict["uk_airport"] == "LPL":
             fp_dict["uk_airport"] = "Liverpool John Lennon"
         elif fp_dict["uk_airport"] == "BOH":
@@ -139,6 +141,21 @@ class FlightPlan:
                 mimetype="application/octet-stream",
                 as_attachment=True,
                 download_name="fp.flightplan",
+                last_modified=datetime.now(),
+            )
+        elif filetype == "csv":
+            data = self.readable_dict()
+            proxy = io.StringIO()
+            writer = csv.writer(proxy)
+            writer.writerows(data.items())
+            mem = io.BytesIO(proxy.getvalue().encode())
+            proxy.close()
+            # noinspection PyArgumentList
+            return send_file(
+                mem,
+                mimetype="text/csv",
+                as_attachment=True,
+                download_name="flight_plan.csv",
                 last_modified=datetime.now(),
             )
         elif filetype == "json":

@@ -123,7 +123,7 @@ def price_plan() -> str:
 def profit_information() -> Optional[str]:
     if fp.complete():
         fp.calculate_profit()
-        fp_dict = fp.return_dict()
+        fp_dict = fp.readable_dict()
         return render_template(
             "profit.html", flight_plan=fp_dict, profit=fp.profit_made()
         )

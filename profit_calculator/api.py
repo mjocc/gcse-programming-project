@@ -28,7 +28,7 @@ def get_logo() -> Response:
 
 @app.route("/api/config")
 def get_api_config() -> Response:
-    return send_file(url_for("static", filename="api-docs/insomnia.json"))
+    return send_file(url_for("static", filename="api-docs/insomnia.json")[1:])
 
 
 @app.route("/api/airport/<airport_code>")

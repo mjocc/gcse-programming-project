@@ -16,6 +16,12 @@
                     </label>
                 </div>
                 <div class="form-check">
+                    <input class="form-check-input" type="radio" name="filetype" id="csv-file" value="csv">
+                    <label class="form-check-label" for="csv-file">
+                        CSV (human-readable)
+                    </label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="radio" name="filetype" id="pickle-file" value="pickle">
                     <label class="form-check-label" for="pickle-file">
                         Flightplan file (data can be imported back into the calculator but not human-readable)
@@ -30,7 +36,7 @@
     <div class="collapse border border-top-0 rounded-bottom bg-light" id="import-form-container">
         <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
             <div class="form-group my-2">
-                <label class="mb-1" for="flight-plan-file">File to import:</label><br>
+                <label class="mb-1" for="flight-plan-file">File to import (must be a .flightplan file):</label><br>
                 <input type="file" class="form-control-file" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
             </div>
             <input type="hidden" name="import/export" value="import" />
