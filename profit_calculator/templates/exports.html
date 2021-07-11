@@ -3,14 +3,14 @@
 {% block title %}Export/import flight plan as file{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column pt-3">
+<div class="container px-2 py-3 d-flex flex-column">
     <form class="d-flex flex-column" action="{{ url_for('export_form') }}" method="post">
         <input type="hidden" name="import/export" value="export" />
         <input class="btn btn-dark my-2 btn-block" type="submit" value="Export data"/>
     </form>
-    <button class="btn btn-dark my-2"  data-toggle="dropdown">Import data</button>
-    <div class="dropdown-menu container" id="dropdown-form-container">
-            <form class="px-4 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
+    <button class="btn btn-dark my-2 mb-0"  data-toggle="collapse" data-target="#dropdown-form-container">Import data</button>
+    <div class="collapse border border-top-0 rounded-bottom bg-light" id="dropdown-form-container">
+            <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
                 <div class="form-group my-2">
                     <label class="mb-1" for="flight-plan-file">File to import</label><br>
                     <input type="file" class="form-control-file" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
@@ -22,13 +22,4 @@
             </form>
     </div>
 </div>
-{% endblock %}
-
-{% block head %}
-<style>
-    #dropdown-form-container{
-        width: 400px;
-        margin-left: 100px;
-    }
-</style>
 {% endblock %}
