@@ -19,25 +19,25 @@
                 <img src="{{ url_for('static', filename='img/plane.svg') }}" width="30" height="30" class="d-inline-block align-top mx-1" alt="">
                 Flight Plan Profitability Calculator
             </a>
-            <div class="dropdown show">
-                <span class="navbar-text px-3 dropdown-toggle" role="button" id="dropdown-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown">
+                <span class="navbar-text px-3 dropdown-toggle" role="button" id="dropdown-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ self.title() }}
                 </span>
-                <div id="navbar-dropdown-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-menu-link">
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('index') %} active {% endif %}" href="{{ url_for('index') }}">Home</a>
+                <div id="navbar-dropdown-menu" class="dropdown-menu dropdown-menu-dark dropdown-menu-sm-end" aria-labelledby="dropdown-menu-link">
+                    <a class="dropdown-item {% if request.path == url_for('index') %} active {% endif %}" href="{{ url_for('index') }}">Home</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('airport_details') %} active {% endif %}" href="{{ url_for('airport_details') }}">Airport details</a>
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('flight_details') %} active {% endif %}" href="{{ url_for('flight_details') }}">Flight details</a>
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('price_plan') %} active {% endif %}" href="{{ url_for('price_plan') }}">Price plan</a>
+                    <a class="dropdown-item {% if request.path == url_for('airport_details') %} active {% endif %}" href="{{ url_for('airport_details') }}">Airport details</a>
+                    <a class="dropdown-item {% if request.path == url_for('flight_details') %} active {% endif %}" href="{{ url_for('flight_details') }}">Flight details</a>
+                    <a class="dropdown-item {% if request.path == url_for('price_plan') %} active {% endif %}" href="{{ url_for('price_plan') }}">Price plan</a>
                     <div class="dropdown-divider"></div>
                     {% if complete %}
                     <div id="profit-dropdown-button">
-                        <a class="dropdown-item link-list-item {% if request.path == url_for('profit_information') %} active {% endif %}" href="{{ url_for('profit_information') }}">Profit information</a>
+                        <a class="dropdown-item {% if request.path == url_for('profit_information') %} active {% endif %}" href="{{ url_for('profit_information') }}">Profit information</a>
                         <div class="dropdown-divider"></div>
                     </div>
                     {% endif %}
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('export_form') %} active {% endif %}" href="{{ url_for('export_form') }}">Import/export data</a>
-                    <a class="dropdown-item link-list-item {% if request.path == url_for('clear_data_confirmation') %} active {% endif %}" href="{{ url_for('clear_data_confirmation') }}">Clear data</a>
+                    <a class="dropdown-item {% if request.path == url_for('export_form') %} active {% endif %}" href="{{ url_for('export_form') }}">Import/export data</a>
+                    <a class="dropdown-item {% if request.path == url_for('clear_data_confirmation') %} active {% endif %}" href="{{ url_for('clear_data_confirmation') }}">Clear data</a>
                 </div>
             </div>
             </nav>
@@ -60,7 +60,7 @@
             {% endwith %}
             {% with form_submit = get_flashed_messages(category_filter=["form-submit"]) %}
                 {% if form_submit %}
-                    <div class= "mt-2 alert alert-success" role="alert">Form submitted successfully. <a data-toggle="collapse" href="#page-data-table" id="page-data-text">Show received/calculated data.</a></div>
+                    <div class= "mt-2 alert alert-success" role="alert">Form submitted successfully. <a data-bs-toggle="collapse" href="#page-data-table" id="page-data-text">Show received/calculated data.</a></div>
                 {% endif %}
             {% endwith %}
             {% with page_data = get_flashed_messages(category_filter=["page-data"]) %}
@@ -84,9 +84,7 @@
     <!--suppress SpellCheckingInspection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
     <!--suppress SpellCheckingInspection -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <!--suppress SpellCheckingInspection -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
         $('#page-data-table').on('show.bs.collapse', () => {
