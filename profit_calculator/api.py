@@ -71,7 +71,8 @@ def import_file_data() -> Tuple[Response, int]:
 
 @app.route("/api/export-data")
 def export_file_data() -> Response:
-    file = fp.export_as_file()
+    filetype = request.args.get("filetype")
+    file = fp.export_as_file(filetype)
     return file
 
 

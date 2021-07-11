@@ -4,22 +4,38 @@
 
 {% block content %}
 <div class="container px-2 py-3 d-flex flex-column">
-    <form class="d-flex flex-column" action="{{ url_for('export_form') }}" method="post">
-        <input type="hidden" name="import/export" value="export" />
-        <input class="btn btn-dark my-2 btn-block" type="submit" value="Export data"/>
-    </form>
-    <button class="btn btn-dark my-2 mb-0"  data-toggle="collapse" data-target="#dropdown-form-container">Import data</button>
-    <div class="collapse border border-top-0 rounded-bottom bg-light" id="dropdown-form-container">
-            <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
-                <div class="form-group my-2">
-                    <label class="mb-1" for="flight-plan-file">File to import</label><br>
-                    <input type="file" class="form-control-file" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
+    <button class="btn btn-dark my-2 mb-0"  data-toggle="collapse" data-target="#export-form-container">Export data</button>
+    <div class="collapse border border-top-0 rounded-bottom bg-light" id="export-form-container">
+        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post">
+            <div class="form-group my-2">
+                <span>File type:</span>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="filetype" id="json-file" value="json">
+                    <label class="form-check-label" for="json-file">
+                        JSON (human-readable)
+                    </label>
                 </div>
-                <div class="form-group my-2">
-                    <input type="hidden" name="import/export" value="import" />
-                    <input class="btn btn-dark my-2" type="submit"/>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="filetype" id="pickle-file" value="pickle">
+                    <label class="form-check-label" for="pickle-file">
+                        Flightplan file (data can be imported back into the calculator but not human-readable)
+                    </label>
                 </div>
-            </form>
+            </div>
+            <input type="hidden" name="import/export" value="export" />
+            <input class="btn btn-dark my-2 btn-block" type="submit" value="Export data"/>
+        </form>
+    </div>
+    <button class="btn btn-dark my-3 mb-0"  data-toggle="collapse" data-target="#import-form-container">Import data</button>
+    <div class="collapse border border-top-0 rounded-bottom bg-light" id="import-form-container">
+        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group my-2">
+                <label class="mb-1" for="flight-plan-file">File to import:</label><br>
+                <input type="file" class="form-control-file" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
+            </div>
+            <input type="hidden" name="import/export" value="import" />
+            <input class="btn btn-dark my-2" type="submit" value="Import data"/>
+        </form>
     </div>
 </div>
 {% endblock %}

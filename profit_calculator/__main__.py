@@ -5,7 +5,7 @@ import random
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from flask import Request, Response, send_file
+from flask import Request, Response, jsonify, make_response, send_file
 from flask.json import JSONEncoder
 from itsdangerous import BadSignature
 
@@ -96,6 +96,19 @@ class FlightPlan:
         self.income: Optional[float] = income
         self.profit: Optional[float] = profit
 
+    def return_dict(self) -> dict:
+        fp_dict = vars(self).copy()
+        for key, value in fp_dict.items():
+            if isinstance(value, float) and key not in ["distance"]:
+                fp_dict[key] = "£{:,.2f}".format(value)
+        fp_dict["distance"] = f"{fp_dict['distance']} km"
+        if fp_dict["uk_airport"] == "LPL":
+            fp_dict["uk_airport"] = "Liverpool John Lennon"
+        elif fp_dict["uk_airport"] == "BOH":
+            fp_dict["uk_airport"] = "Bournemouth International Airport"
+        fp_dict = {str(key): str(value) for key, value in fp_dict.items()}
+        return fp_dict
+
     def import_from_file(self, request_obj: Request) -> Tuple[bool, str]:
         if "flight-plan-file" not in request_obj.files:
             return False, "No flight plan file sent."
@@ -115,18 +128,27 @@ class FlightPlan:
             self.aircraft = Aircraft.all[self.aircraft.id]
         return True, "Data imported from file successfully."
 
-    def export_as_file(self) -> Response:
-        pickled_data = pickle.dumps(self)
-        file_data = fp_signer.sign(pickled_data)
-        file = io.BytesIO(file_data)
-        # noinspection PyArgumentList
-        return send_file(
-            file,
-            mimetype="application/octet-stream",
-            as_attachment=True,
-            download_name="fp.flightplan",
-            last_modified=datetime.now(),
-        )
+    def export_as_file(self, filetype) -> Response:
+        if filetype == "pickle":
+            pickled_data = pickle.dumps(self)
+            file_data = fp_signer.sign(pickled_data)
+            file = io.BytesIO(file_data)
+            # noinspection PyArgumentList
+            return send_file(
+                file,
+                mimetype="application/octet-stream",
+                as_attachment=True,
+                download_name="fp.flightplan",
+                last_modified=datetime.now(),
+            )
+        elif filetype == "json":
+            json_response = make_response(jsonify(self))
+            json_response.headers[
+                "Content-Disposition"
+            ] = "attachment; filename=flight_plan.json"
+            return json_response
+        else:
+            return jsonify(success=False, message="No filetype provided.")
 
     def airport_details(
         self, uk_airport: str, foreign_airport: str
@@ -232,6 +254,9 @@ class FlightPlan:
 
         self.standard_class_price = standard_class_price
         self.first_class_price = first_class_price
+        return True, None
+
+    def calculate_profit(self) -> None:
         self.cost_per_seat = self.aircraft.running_cost * (self.distance / 100)
         self.running_cost = self.cost_per_seat * (
             self.no_first_class + self.no_standard_class
@@ -241,7 +266,6 @@ class FlightPlan:
             + self.no_standard_class * self.standard_class_price
         )
         self.profit = self.income - self.running_cost
-        return True, None
 
     def complete(self) -> bool:
         return (

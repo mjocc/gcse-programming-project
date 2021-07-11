@@ -77,10 +77,6 @@ def price_plan() -> str:
                 {
                     "standard_class_price": fp.standard_class_price,
                     "first_class_price": fp.first_class_price,
-                    "cost_per_seat": fp.cost_per_seat,
-                    "running_cost": fp.running_cost,
-                    "income": fp.income,
-                    "profit": fp.profit,
                 },
                 "page-data",
             )
@@ -126,15 +122,8 @@ def price_plan() -> str:
 @app.route("/profit")
 def profit_information() -> Optional[str]:
     if fp.complete():
-        fp_dict: dict = vars(fp).copy()
-        for key, value in fp_dict.items():
-            if isinstance(value, float) and key not in ["distance"]:
-                fp_dict[key] = "£{:,.2f}".format(value)
-        fp_dict["distance"] = f"{fp_dict['distance']} km"
-        if fp_dict["uk_airport"] == "LPL":
-            fp_dict["uk_airport"] = "Liverpool John Lennon"
-        elif fp_dict["uk_airport"] == "BOH":
-            fp_dict["uk_airport"] = "Bournemouth International Airport"
+        fp.calculate_profit()
+        fp_dict = fp.return_dict()
         return render_template(
             "profit.html", flight_plan=fp_dict, profit=fp.profit_made()
         )
@@ -151,7 +140,7 @@ def export_form() -> Union[str, Response]:
             success, msg = fp.import_from_file(request)
             flash(msg, "message" if success else "error")
         elif request.form["import/export"] == "export":
-            return fp.export_as_file()
+            return fp.export_as_file(request.form["filetype"])
     return render_template("exports.html")
 
 
