@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from flask import Response, abort, flash, render_template, request, url_for
+from flask import Response, flash, redirect, render_template, request, url_for
 
 from profit_calculator import app
 from profit_calculator import flight_plan as fp
@@ -116,8 +116,7 @@ def profit_information() -> Optional[str]:
             "profit.html", flight_plan=fp_dict, profit=fp.profit_made()
         )
     else:
-        abort(418)
-        return None
+        return redirect(url_for("index"))
 
 
 @app.route("/exports", methods=["GET", "POST"])

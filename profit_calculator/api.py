@@ -36,7 +36,7 @@ def get_airport_data(airport_code) -> Tuple[Response, int]:
     try:
         return jsonify(vars(Airport.all[airport_code.upper()])), 200
     except KeyError:
-        return jsonify(success=False, message="Invalid airport code."), 404
+        return jsonify(success=False, message="Invalid airport code."), 422
 
 
 @app.route("/api/aircraft/<int:aircraft_id>")
@@ -44,7 +44,7 @@ def get_aircraft_data(aircraft_id) -> Tuple[Response, int]:
     try:
         return jsonify(vars(Aircraft.all[aircraft_id])), 200
     except IndexError:
-        return jsonify(success=False, message="Invalid aircraft id."), 404
+        return jsonify(success=False, message="Invalid aircraft id."), 422
 
 
 @app.route("/api/flight-plan")
@@ -66,7 +66,7 @@ def import_file_data() -> Tuple[Response, int]:
     response_dict = dict(success=success)
     if success is False:
         response_dict["message"] = err_msg
-    return jsonify(response_dict), 200 if success else 400
+    return jsonify(response_dict), 200 if success else 422
 
 
 @app.route("/api/export-data")
