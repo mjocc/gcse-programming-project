@@ -251,23 +251,23 @@ class FlightPlan:
                 "this form.",
             )
 
-        if standard_class_price[::-1].find(".") > 2:
-            return False, "Not a valid standard class price - too many decimal places."
         try:
             standard_class_price = float(standard_class_price)
         except ValueError:
             return False, "Not a valid standard class price - not a number."
         if standard_class_price < 0:
             return False, "Not a valid standard class price - cannot be less than 0."
+        if str(standard_class_price)[::-1].find(".") > 2:
+            return False, "Not a valid standard class price - too many decimal places."
 
-        if first_class_price[::-1].find(".") > 2:
-            return False, "Not a valid first class price - too many decimal places."
         try:
             first_class_price = float(first_class_price)
         except ValueError:
             return False, "Not a valid first class price - not a number."
         if first_class_price < 0:
             return False, "Not a valid first class price - cannot be less than 0."
+        if str(first_class_price)[::-1].find(".") > 2:
+            return False, "Not a valid first class price - too many decimal places."
 
         self.standard_class_price = standard_class_price
         self.first_class_price = first_class_price
