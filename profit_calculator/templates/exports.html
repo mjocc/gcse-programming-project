@@ -36,7 +36,7 @@
     <div class="collapse border border-top-0 rounded-bottom bg-light" id="import-form-container">
         <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
             <label class="form-label mb-1" for="flight-plan-file">File to import (must be a .flightplan file):</label><br>
-            <input type="file" class="form-control" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
+            <input type="file" class="form-control mb-2" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
             <input type="hidden" name="import/export" value="import" />
             <input class="btn btn-dark my-2" type="submit" value="Import data"/>
         </form>
