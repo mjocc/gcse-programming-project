@@ -19,11 +19,11 @@
                 <img src="{{ url_for('static', filename='img/plane.svg') }}" width="30" height="30" class="d-inline-block align-top mx-1" alt="">
                 Flight Plan Profitability Calculator
             </a>
-            <div class="dropdown">
+            <div class="dropdown mt-0 mt-sm-0 ms-auto ms-sm-0">
                 <span class="navbar-text px-3 dropdown-toggle" role="button" id="dropdown-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ self.title() }}
                 </span>
-                <div id="navbar-dropdown-menu" class="dropdown-menu dropdown-menu-dark dropdown-menu-sm-end" aria-labelledby="dropdown-menu-link">
+                <div id="navbar-dropdown-menu" class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdown-menu-link">
                     <a class="dropdown-item {% if request.path == url_for('index') %} active {% endif %}" href="{{ url_for('index') }}">Home</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item {% if request.path == url_for('airport_details') %} active {% endif %}" href="{{ url_for('airport_details') }}">Airport details</a>
