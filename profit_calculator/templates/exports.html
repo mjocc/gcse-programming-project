@@ -3,7 +3,7 @@
 {% block title %}Export/import flight plan as file{% endblock %}
 
 {% block content %}
-<div class="container px-2 pt-3 pb-2 d-flex flex-column">
+<div class="container px-0 pt-3 pb-2 d-flex flex-column">
     <button class="btn btn-dark my-2 mb-0"  data-bs-toggle="collapse" data-bs-target="#export-form-container">Export data</button>
     <div class="collapse border border-top-0 rounded-bottom bg-light" id="export-form-container">
         <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" id="export-form">
