@@ -3,10 +3,10 @@
 {% block title %}Export/import flight plan as file{% endblock %}
 
 {% block content %}
-<div class="container px-2 py-3 d-flex flex-column">
+<div class="container px-2 pt-3 pb-2 d-flex flex-column">
     <button class="btn btn-dark my-2 mb-0"  data-bs-toggle="collapse" data-bs-target="#export-form-container">Export data</button>
     <div class="collapse border border-top-0 rounded-bottom bg-light" id="export-form-container">
-        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post">
+        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" id="export-form">
             <div class="form-group my-2">
                 <span>File type:</span>
                 <div class="form-check">
@@ -34,12 +34,51 @@
     </div>
     <button class="btn btn-dark my-3 mb-0"  data-bs-toggle="collapse" data-bs-target="#import-form-container">Import data</button>
     <div class="collapse border border-top-0 rounded-bottom bg-light" id="import-form-container">
-        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data">
+        <form class="px-5 py-3" action="{{ url_for('export_form') }}" method="post" enctype="multipart/form-data" id="import-form">
             <label class="form-label mb-1" for="flight-plan-file">File to import (must be a .flightplan file):</label><br>
             <input type="file" class="form-control mb-2" id="flight-plan-file" name="flight-plan-file" accept=".flightplan" required/>
             <input type="hidden" name="import/export" value="import" />
             <input class="btn btn-dark my-2" type="submit" value="Import data"/>
         </form>
     </div>
+    <a class="btn btn-dark mt-3" href="{{ url_for('index') }}">Back to Main Menu</a>
 </div>
+<div class="modal" tabindex="-1" id="confirmation-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Importing this data will permanently overwrite the existing data. If you would like to access this data again in the future, please first export it before importing anything.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmation-continue">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        confirmationModal = document.querySelector('#confirmation-modal');
+        confirmationContinue = document.querySelector('#confirmation-continue');
+        importForm = document.querySelector('#import-form');
+        const modal = new bootstrap.Modal(confirmationModal);
+
+        importForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            console.log('form submit')
+            modal.show();
+            return false;
+        });
+
+        confirmationContinue.addEventListener('click', () => {
+            importForm.submit();
+        });
+    });
+</script>
 {% endblock %}

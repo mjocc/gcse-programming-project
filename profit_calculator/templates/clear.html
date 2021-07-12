@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="alert alert-danger" id="success-message" role="alert"><b>WARNING: clearing data is permanent. All data will need to be re-entered.</b></div>
-<button class="btn btn-danger" id="main-button" onclick="deleteData()">Continue</button>
+<button class="btn btn-danger" id="main-button">Continue</button>
 <a class="btn btn-dark visible" href="{{ url_for('index') }}">Cancel</a>
 {% endblock %}
 
@@ -30,17 +30,19 @@
         mb.parentNode.replaceChild(newMb, mb);
     }
 
-    function deleteData() {
-        fetch('{{ url_for('clear_data') }}', {method: 'DELETE'})
-            .then(response => {
-                return response.json();
-            }).then(json => {
-                if (json.success) {
-                    showMessage('alert-success', 'Data cleared successfully.');
-                } else {
-                    showMessage('alert-danger', 'Something went wrong. Please try again.');
-                }
-            });
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#main-button').addEventListener('click', () => {
+            fetch('{{ url_for('clear_data') }}', {method: 'DELETE'})
+                .then(response => {
+                    return response.json();
+                }).then(json => {
+                    if (json.success) {
+                        showMessage('alert-success', 'Data cleared successfully.');
+                    } else {
+                        showMessage('alert-danger', 'Something went wrong. Please try again.');
+                    }
+                });
+        });
+    });
 </script>
 {% endblock %}

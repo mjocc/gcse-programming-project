@@ -185,6 +185,9 @@ class FlightPlan:
         elif self.uk_airport == "BOH":
             self.distance = self.foreign_airport.distance_from_boh
 
+        if self.complete():
+            self.calculate_profit()
+
         return True, None
 
     def airport_details_exist(self) -> bool:
@@ -223,6 +226,9 @@ class FlightPlan:
         self.aircraft = aircraft
         self.no_first_class = no_first_class
         self.no_standard_class = aircraft.max_standard_class - no_first_class * 2
+
+        if self.complete():
+            self.calculate_profit()
 
         return True, None
 
@@ -271,6 +277,10 @@ class FlightPlan:
 
         self.standard_class_price = standard_class_price
         self.first_class_price = first_class_price
+
+        if self.complete():
+            self.calculate_profit()
+
         return True, None
 
     def calculate_profit(self) -> None:
