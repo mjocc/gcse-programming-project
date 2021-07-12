@@ -15,7 +15,7 @@
     </div>
     <div class="form-group my-3">
         <label class="mb-1" for="first-class-seats">First Class Seats</label>
-        <input type="number" class="form-control" id="first-class-seats" name="first-class-seats" disabled>
+        <input type="number" class="form-control" id="first-class-seats" name="first-class-seats" disabled required>
     </div>
     <input class="btn btn-dark my-2" type="submit" />
     <a class="btn btn-dark" href="{{ url_for('index') }}">Back to Main Menu</a>
@@ -26,16 +26,18 @@
 
 {% block scripts %}
 <script>
-    const aircraftData = {{ aircraft_data|tojson|safe  }};
-    const aircraftType = document.querySelector('#aircraft-type');
-    const firstClassSeats = document.querySelector('#first-class-seats');
-    aircraftType.addEventListener("change", () => {
-        firstClassSeats.removeAttribute("disabled");
-        let aircraftTypeIndex = aircraftType.value;
-        let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
-        let maxFirstClass = maxStandardClass / 2;
-        firstClassSeats.setAttribute("min", minFirstClass);
-        firstClassSeats.setAttribute("max", maxFirstClass);
+    document.addEventListener('DOMContentLoaded', () => {
+        const aircraftData = {{ aircraft_data|tojson|safe  }};
+        const aircraftType = document.querySelector('#aircraft-type');
+        const firstClassSeats = document.querySelector('#first-class-seats');
+        aircraftType.addEventListener("change", () => {
+            firstClassSeats.removeAttribute("disabled");
+            let aircraftTypeIndex = aircraftType.value;
+            let [maxStandardClass, minFirstClass] = aircraftData[aircraftTypeIndex];
+            let maxFirstClass = maxStandardClass / 2;
+            firstClassSeats.setAttribute("min", minFirstClass);
+            firstClassSeats.setAttribute("max", maxFirstClass);
+        });
     });
 </script>
 {% endblock %}

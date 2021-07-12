@@ -22,9 +22,9 @@
             node.classList.add('invisible');
         });
 
-        mb = document.querySelector('#main-button')
-        newMb = document.createElement('a')
-        newMb.setAttribute('href', '{{ url_for('index') }}')
+        mb = document.querySelector('#main-button');
+        newMb = document.createElement('a');
+        newMb.setAttribute('href', '{{ url_for('index') }}');
         newMb.classList.add('btn', 'btn-dark');
         newMb.textContent = 'Back to Main Menu';
         mb.parentNode.replaceChild(newMb, mb);

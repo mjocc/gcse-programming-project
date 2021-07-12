@@ -1,4 +1,3 @@
-- [ ] Add bootstrap styles to client-side form validation
 - [x] Remove jQuery dependency
   - [x] base.html
   - [x] flight.html
