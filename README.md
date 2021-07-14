@@ -3,7 +3,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-## To Run
+## To Setup
 
 ### For Development
 
@@ -13,13 +13,23 @@ After cloning, use poetry to install required packages into a virtual environmen
 poetry install
 ```
 
-This will be done automatically on replit.
+This will be done automatically on replit. If you are attempting to run in production mode and don't need the dev packages, run:
+
+```shell
+poetry install --no-dev
+```
 
 Open the poetry virtual shell:
 
 ```shell
 poetry shell
 ```
+
+You must create an .env file in the root dir of the repository with a `SECRET_KEY` variable, a string of bytes with UTF-8 encoding. This is used to sign export files and session cookies. You could also set the `SECRET_KEY` environmental variable instead of using an .env file.
+
+## To Run
+
+### For Development
 
 To run a local development server that automatically restarts when there are changes:
 
@@ -30,20 +40,6 @@ FLASK_APP=profit_calculator FLASK_ENV=development flask run
 This will run on [localhost:5000](localhost:5000).
 
 ### In Production
-
-After cloning, use poetry to install the required production packages into a virtual environment:
-
-```shell
-poetry install --no-dev
-```
-
-This will be done automatically on replit.
-
-Open the poetry virtual shell:
-
-```shell
-poetry shell
-```
 
 **On Windows:**  
 
