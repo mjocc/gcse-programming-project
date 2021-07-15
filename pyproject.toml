@@ -11,8 +11,8 @@ colorama = "^0.4.4"
 types-Flask = "^1.1.1"
 python-dotenv = "^0.18.0"
 itsdangerous = "^2.0.1"
-gunicorn = {version = "^20.1.0", platform = "Linux"}
-waitress = {version = "^2.0.0", platform = "Windows"}
+waitress = {version = "^2.0.0", platform = "win32"}
+gunicorn = {version = "^20.1.0", platform = "linux"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"
